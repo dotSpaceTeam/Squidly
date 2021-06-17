@@ -5,15 +5,20 @@ plugins {
 group 'team.dotspace.squidly'
 version '1.0-SNAPSHOT'
 
+ext {
+    JDA_VERSION = '4.3.0_277';
+    SLF4J_VERSION = '1.7.30';
+}
+
 repositories {
     mavenCentral()
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-}
-
-test {
-    useJUnitPlatform()
+    implementation "net.dv8tion:JDA:${JDA_VERSION}"
+    implementation "org.slf4j:slf4j-simple:${SLF4J_VERSION}"
 }
