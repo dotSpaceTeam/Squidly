@@ -6,8 +6,9 @@ group 'team.dotspace.squidly'
 version '1.0-SNAPSHOT'
 
 ext {
-    JDA_VERSION = '4.3.0_277';
-    SLF4J_VERSION = '1.7.30';
+    JDA_VERSION = '4.3.0_277'
+    SLF4J_VERSION = '1.7.30'
+    JACKSON_VERSION = '2.12.3'
 }
 
 repositories {
@@ -21,4 +22,5 @@ repositories {
 dependencies {
     implementation "net.dv8tion:JDA:${JDA_VERSION}"
     implementation "org.slf4j:slf4j-simple:${SLF4J_VERSION}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
 }
