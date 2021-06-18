@@ -14,9 +14,11 @@ public class SquidlyBot {
   private static SquidlyBot instance;
   final Logger logger = LoggerFactory.getLogger(SquidlyBot.class);
   private final JDA jda;
+  private final HirezCredentialPair hirezCredentialPair;
 
-  public SquidlyBot(JDA jda) {
+  public SquidlyBot(JDA jda, HirezCredentialPair credentialPair) {
     this.jda = jda;
+    this.hirezCredentialPair = credentialPair;
     instance = this;
     this.initialize();
   }
@@ -35,5 +37,9 @@ public class SquidlyBot {
 
   public JDA getJda() {
     return jda;
+  }
+
+  public HirezCredentialPair getHirezCredentialPair() {
+    return hirezCredentialPair;
   }
 }

@@ -5,8 +5,11 @@
 
 package team.dotspace.squidly.validation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import team.dotspace.squidly.HirezCredentialPair;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,26 +20,33 @@ public class StartUpValidation {
 
   final static Logger logger = LoggerFactory.getLogger(StartUpValidation.class);
   private static String TOKEN;
+  private static HirezCredentialPair CREDENTIALS;
 
-  public static boolean validate(String[] args) {
-    if (args.length < 1) {
+  public static boolean validate(String[] args) throws IOException {
+    if (args.length < 2) {
       logger.error("You need to specify the needed arguments to run this application.");
       return false;
     }
 
-    var file = new File(args[0]);
+    var tokenFile = new File(args[0]);
+    var credentialFile = new File(args[1]);
 
-    if (!file.exists() || !file.canRead()) {
-      logger.error("The specifed file does not exist, or could not be read.");
+    if (!tokenFile.exists() || !tokenFile.canRead() || !credentialFile.exists() || !credentialFile.canRead()) {
+      logger.error("One of the specifed files does not exist, or could not be read.");
       return false;
     }
 
-    try (var reader = new BufferedReader(new FileReader(file))) {
+    try (var reader = new BufferedReader(new FileReader(tokenFile))) {
       TOKEN = reader.readLine();
     } catch (IOException ex) {
-      logger.error("The specifed file does not exist, or could not be read.");
+      logger.error("One of the specifed files does not exist, or could not be read.");
       return false;
     }
+
+    var mapper = new ObjectMapper()
+        .enable(SerializationFeature.INDENT_OUTPUT);
+
+    CREDENTIALS = mapper.readValue(credentialFile, HirezCredentialPair.class);
 
     logger.info("Validation Passed! Login in now..");
     return true;
@@ -44,5 +54,9 @@ public class StartUpValidation {
 
   public static String getTOKEN() {
     return TOKEN;
+  }
+
+  public static HirezCredentialPair getCREDENTIALS() {
+    return CREDENTIALS;
   }
 }
