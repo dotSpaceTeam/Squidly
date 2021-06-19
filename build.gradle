@@ -23,4 +23,5 @@ dependencies {
     implementation "net.dv8tion:JDA:${JDA_VERSION}"
     implementation "org.slf4j:slf4j-simple:${SLF4J_VERSION}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
+    implementation "com.konghq:unirest-java:3.11.09:standalone"
 }

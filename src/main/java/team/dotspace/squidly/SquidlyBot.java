@@ -8,6 +8,7 @@ package team.dotspace.squidly;
 import net.dv8tion.jda.api.JDA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import team.dotspace.squidly.requests.session.HirezSessionHandler;
 
 public class SquidlyBot {
 
@@ -15,6 +16,7 @@ public class SquidlyBot {
   final Logger logger = LoggerFactory.getLogger(SquidlyBot.class);
   private final JDA jda;
   private final HirezCredentialPair hirezCredentialPair;
+  private HirezSessionHandler sessionHandler;
 
   public SquidlyBot(JDA jda, HirezCredentialPair credentialPair) {
     this.jda = jda;
@@ -28,6 +30,7 @@ public class SquidlyBot {
   }
 
   private void initialize() {
+    this.sessionHandler = new HirezSessionHandler();
     //TODO Register SlashCommands
   }
 
@@ -41,5 +44,9 @@ public class SquidlyBot {
 
   public HirezCredentialPair getHirezCredentialPair() {
     return hirezCredentialPair;
+  }
+
+  public HirezSessionHandler getSessionHandler() {
+    return sessionHandler;
   }
 }
