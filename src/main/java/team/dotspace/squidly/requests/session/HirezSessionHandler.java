@@ -5,43 +5,72 @@
 
 package team.dotspace.squidly.requests.session;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import team.dotspace.squidly.HirezCredentialPair;
-import team.dotspace.squidly.SquidlyBot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import team.dotspace.squidly.requests.APIRequestBuilder;
+import team.dotspace.squidly.requests.codes.HirezEndpoint;
+import team.dotspace.squidly.requests.command.HirezCommandType;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class HirezSessionHandler {
 
-  private final HirezCredentialPair credentials = SquidlyBot.getInstance().getHirezCredentialPair();
-  private Timer timer = new Timer();
-  private String currentSession;
+  private final Logger logger = LoggerFactory.getLogger(HirezSessionHandler.class);
+  private final Timer timer = new Timer();
+  private String paladinsSession;
+  private String smiteSession;
 
   public HirezSessionHandler() {
+    this.paladinsSession = "paladinsSession";
+    this.smiteSession = "smiteSession";
+    this.scheduleTimer();
+  }
+
+  private void scheduleTimer() {
     timer.scheduleAtFixedRate(new TimerTask() {
       @Override
       public void run() {
-        //TODO request new session
+        requestSession(HirezEndpoint.PALADINS);
+        requestSession(HirezEndpoint.SMITE);
       }
     }, 1000 * 2, 1000 * 60 * 15);
-
   }
 
-  private String getSignature(String command) {
-    var s = this.credentials.devID() + command + this.credentials.authKEY() + getTimestamp();
-    return DigestUtils.md5Hex(s).toLowerCase();
+  public String getSession(HirezEndpoint endpoint) {
+    if (endpoint.equals(HirezEndpoint.SMITE)) return smiteSession;
+    else return paladinsSession;
   }
 
-  private String getTimestamp() {
-    var time = ZonedDateTime.now(ZoneId.of("UTC"));
-    return DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(time);
-  }
+  private void requestSession(HirezEndpoint endpoint) {
+    var httpResponse = new APIRequestBuilder(HirezCommandType.createsession)
+        .changeEndpoint(endpoint)
+        .build();
 
-  public String getCurrentSession() {
-    return currentSession;
+    httpResponse.ifSuccess(response -> {
+      if (response.getBody().getObject().getString("ret_msg").equals("Approved")) {
+        var sessionId = response.getBody().getObject().getString("session_id");
+        logger.info("Successfully retrieved new " + endpoint.name() + " Session! ({})", sessionId);
+
+        if (endpoint == HirezEndpoint.PALADINS)
+          this.paladinsSession = sessionId;
+        else if (endpoint == HirezEndpoint.SMITE)
+          this.smiteSession = sessionId;
+
+        return;
+      }
+      logger.error("There was a problem requesting a new " + endpoint.name() + " Session! Msg: {}", response.getBody().getObject().getString("ret_msg"));
+    });
+
+    httpResponse.ifFailure(response -> {
+      var s = "ret_msg not found!";
+
+      if (response.getBody() != null)
+        if (response.getBody().getObject() != null)
+          if (response.getBody().getObject().getString("ret_msg") != null)
+            s = response.getBody().getObject().getString("ret_msg");
+
+      logger.error("{}:{}! Msg: {}", response.getStatus(), response.getStatusText(), s);
+    });
   }
 }
