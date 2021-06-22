@@ -7,7 +7,7 @@ package team.dotspace.squidly.requests.command;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RequestParameterMap extends ConcurrentHashMap<CommandParameterType, String> {
+public class RequestParameterMap extends ConcurrentHashMap<RequestParameterType, String> {
 
 }
 

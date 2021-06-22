@@ -5,7 +5,7 @@
 
 package team.dotspace.squidly.requests.command;
 
-public enum CommandParameterType {
+public enum RequestParameterType {
 
   DEVELOPER_ID("developerId"),
   SIGNATURE("signature"),
@@ -34,7 +34,7 @@ public enum CommandParameterType {
   SEARCH_TEAM("searchTeam");
 
   String s;
-  CommandParameterType(String s) {
+  RequestParameterType(String s) {
     this.s = s;
   }
 

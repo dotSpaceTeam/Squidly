@@ -8,7 +8,7 @@ package team.dotspace.squidly.requests.command;
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
 
 import static team.dotspace.squidly.requests.codes.HirezEndpoint.*;
-import static team.dotspace.squidly.requests.command.CommandParameterType.*;
+import static team.dotspace.squidly.requests.command.RequestParameterType.*;
 
 public enum HirezCommandType {
 
@@ -23,9 +23,9 @@ public enum HirezCommandType {
 
 
   HirezEndpoint endpoint;
-  CommandParameterType[] requiredTypes;
+  RequestParameterType[] requiredTypes;
 
-  HirezCommandType(HirezEndpoint endpoint, CommandParameterType... requiredTypes) {
+  HirezCommandType(HirezEndpoint endpoint, RequestParameterType... requiredTypes) {
     this.endpoint = endpoint;
     this.requiredTypes = requiredTypes;
   }
@@ -34,7 +34,7 @@ public enum HirezCommandType {
     return endpoint;
   }
 
-  public CommandParameterType[] getRequiredTypes() {
+  public RequestParameterType[] getRequiredTypes() {
     return requiredTypes;
   }
 

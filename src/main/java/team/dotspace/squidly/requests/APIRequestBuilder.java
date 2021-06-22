@@ -12,7 +12,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import team.dotspace.squidly.HirezCredentialPair;
 import team.dotspace.squidly.SquidlyBot;
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
-import team.dotspace.squidly.requests.command.CommandParameterType;
+import team.dotspace.squidly.requests.command.RequestParameterType;
 import team.dotspace.squidly.requests.command.HirezCommandType;
 import team.dotspace.squidly.requests.command.RequestParameterMap;
 
@@ -39,7 +39,7 @@ public class APIRequestBuilder {
     this.endpoint = commandType.getEndpoint();
   }
 
-  public APIRequestBuilder addParameter(CommandParameterType parameterType, String value) {
+  public APIRequestBuilder addParameter(RequestParameterType parameterType, String value) {
     this.parameterMap.put(parameterType, value);
     return this;
   }
@@ -50,10 +50,10 @@ public class APIRequestBuilder {
   }
 
   public String constructURL() {
-    this.parameterMap.put(CommandParameterType.DEVELOPER_ID, this.credentialPair.devID());
-    this.parameterMap.put(CommandParameterType.SIGNATURE, getSignature());
-    this.parameterMap.put(CommandParameterType.TIMESTAMP, getTimestamp());
-    this.parameterMap.put(CommandParameterType.SESSION, getSession());
+    this.parameterMap.put(RequestParameterType.DEVELOPER_ID, this.credentialPair.devID());
+    this.parameterMap.put(RequestParameterType.SIGNATURE, getSignature());
+    this.parameterMap.put(RequestParameterType.TIMESTAMP, getTimestamp());
+    this.parameterMap.put(RequestParameterType.SESSION, getSession());
 
     var stringBuilder = new StringBuilder(this.endpoint.getUrl());
     stringBuilder.append(this.commandType.name()).append("json").append("/");
