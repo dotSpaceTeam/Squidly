@@ -63,8 +63,6 @@ public class APIRequestBuilder {
     }
     var s = stringBuilder.toString();
 
-    System.out.println(s);
-
     return s.substring(0, s.length() - 1);
   }
 
