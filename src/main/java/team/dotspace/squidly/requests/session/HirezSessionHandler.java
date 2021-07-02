@@ -17,7 +17,7 @@ import java.util.TimerTask;
 public class HirezSessionHandler {
 
   private final Logger logger = LoggerFactory.getLogger(HirezSessionHandler.class);
-  private final Timer timer = new Timer();
+  private final Timer timer = new Timer("Session-Timer");
   private String paladinsSession;
   private String smiteSession;
 
