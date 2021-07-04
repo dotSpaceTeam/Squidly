@@ -12,7 +12,6 @@ import team.dotspace.squidly.validation.StartUpValidation;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.util.EnumSet;
 
 public class Main {
 
@@ -20,7 +19,7 @@ public class Main {
 
     if (StartUpValidation.validate(args)) {
       JDA jda = JDABuilder
-          .createLight(StartUpValidation.getTOKEN(), EnumSet.noneOf(GatewayIntent.class))
+          .createLight(StartUpValidation.getTOKEN(), GatewayIntent.DIRECT_MESSAGES)
           .build();
 
       new SquidlyBot(jda, StartUpValidation.getCREDENTIALS());
