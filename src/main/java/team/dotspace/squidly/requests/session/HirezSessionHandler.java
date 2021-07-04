@@ -34,7 +34,7 @@ public class HirezSessionHandler {
         requestSession(HirezEndpoint.PALADINS);
         requestSession(HirezEndpoint.SMITE);
       }
-    }, 1000 * 2, 1000 * 60 * 15);
+    }, 0, 1000 * 60 * 15);
   }
 
   public String getSession(HirezEndpoint endpoint) {
