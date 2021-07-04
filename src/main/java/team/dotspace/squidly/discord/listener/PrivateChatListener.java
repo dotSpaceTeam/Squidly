@@ -27,7 +27,10 @@ public class PrivateChatListener extends ListenerAdapter {
     var commandList = instance.getSlashCommandManager().getCommands();
     var action = jda.updateCommands().addCommands(commandList);
     action.queue(
-        commands -> instance.getLogger().info("Sucessfully updated the following commands: {}", Arrays.toString(commands.toArray())),
-        throwable -> instance.getLogger().error("Failure while updating the commands: {}", Arrays.toString(throwable.getSuppressed())));
+        commands -> event.getChannel().sendMessage("Sucessfully updated!").queue(),
+        throwable -> {
+          event.getChannel().sendMessage("Failure while updating the commands! Check console logs!").queue();
+          instance.getLogger().error("Failure while updating the commands: {}", Arrays.toString(throwable.getSuppressed()));
+        });
   }
 }
