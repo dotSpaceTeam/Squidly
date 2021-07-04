@@ -12,9 +12,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 import team.dotspace.squidly.HirezCredentialPair;
 import team.dotspace.squidly.SquidlyBot;
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
-import team.dotspace.squidly.requests.command.RequestParameterType;
 import team.dotspace.squidly.requests.command.HirezCommandType;
 import team.dotspace.squidly.requests.command.RequestParameterMap;
+import team.dotspace.squidly.requests.command.RequestParameterType;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -45,6 +45,8 @@ public class APIRequestBuilder {
   }
 
   public APIRequestBuilder changeEndpoint(HirezEndpoint endpoint) {
+    if (this.endpoint != HirezEndpoint.ANY)
+      SquidlyBot.getInstance().getLogger().error("Arborted chaning endpoint. {} is {} only!", this.commandType.name(), this.commandType.getEndpoint());
     this.endpoint = endpoint;
     return this;
   }
