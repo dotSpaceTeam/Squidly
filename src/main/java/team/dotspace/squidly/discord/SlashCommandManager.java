@@ -5,13 +5,13 @@
 
 package team.dotspace.squidly.discord;
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.jetbrains.annotations.NotNull;
+import team.dotspace.squidly.discord.listener.MatchCommandHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,15 +52,7 @@ public class SlashCommandManager extends ListenerAdapter {
   @Override
   public void onSlashCommand(@NotNull SlashCommandEvent event) {
     switch (event.getName()) {
-      case "match" -> {
-        //Guaranteed not Null because option 'player' is required!
-        var player = event.getOption("player").getName();
-
-        event.deferReply().queue(interactionHook -> {
-          var builder = new EmbedBuilder();
-          interactionHook.editOriginalEmbeds(builder.build()).queue();
-        });
-      }
+      case "match" -> MatchCommandHandler.handleCommand(event);
       default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
     }
   }
