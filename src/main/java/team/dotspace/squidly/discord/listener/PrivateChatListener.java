@@ -21,7 +21,7 @@ public class PrivateChatListener extends ListenerAdapter {
   @Override
   public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
     if (event.getAuthor().isBot()) return;
-    if (!event.getAuthor().getId().equals("")) return;
+    if (!event.getAuthor().getId().equals("237944715998265344")) return;
     if (!event.getMessage().getContentRaw().equals("update!")) return;
 
     var commandList = instance.getSlashCommandManager().getCommands();
