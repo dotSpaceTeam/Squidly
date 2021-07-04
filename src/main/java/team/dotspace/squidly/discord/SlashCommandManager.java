@@ -5,11 +5,12 @@
 
 package team.dotspace.squidly.discord;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,19 +23,23 @@ public class SlashCommandManager extends ListenerAdapter {
   {
     commandDataList.add(
         new CommandData("match", "Displays important information about a players current match")
-            .addSubcommands(
-                new SubcommandData("pala", "Displays information about a players current Paladins match")
-                    .addOption(OptionType.STRING, "player", "The name of the player you want the game to be looked up", true),
-                new SubcommandData("smite", "Displays important information about a players current Smite match")
-                    .addOption(OptionType.STRING, "player", "The name of the player you want the game to be looked up", true)
+            .addOptions(
+                new OptionData(OptionType.STRING, "game", "The game which shall be searched for the current game")
+                    .addChoice("game", "paladins")
+                    .addChoice("game", "smite")
+                    .setRequired(true),
+                new OptionData(OptionType.STRING, "player", "Displays information about a players current match")
+                    .setRequired(true)
             )
     );
 
     commandDataList.add(
         new CommandData("mymatch", "Displays information about the current match of your saved player")
-            .addSubcommands(
-                new SubcommandData("pala", "Displays information about your current Paladins match"),
-                new SubcommandData("smite", "Displays important information about your current Smite match")
+            .addOptions(
+                new OptionData(OptionType.STRING, "game", "The game which shall be searched for the current game")
+                    .addChoice("game", "paladins")
+                    .addChoice("game", "smite")
+                    .setRequired(false)
             )
     );
   }
@@ -47,8 +52,16 @@ public class SlashCommandManager extends ListenerAdapter {
   @Override
   public void onSlashCommand(@NotNull SlashCommandEvent event) {
     switch (event.getName()) {
-      default ->
-          event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
+      case "match" -> {
+        //Guaranteed not Null because option 'player' is required!
+        var player = event.getOption("player").getName();
+
+        event.deferReply().queue(interactionHook -> {
+          var builder = new EmbedBuilder();
+          interactionHook.editOriginalEmbeds(builder.build()).queue();
+        });
+      }
+      default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
     }
   }
 }
