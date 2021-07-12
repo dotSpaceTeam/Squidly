@@ -7,13 +7,15 @@ package team.dotspace.squidly.requests.codes;
 
 public enum PlayerStatusCode {
 
-  OFFLINE(0),
-  LOBBY(1),
-  SELECTION(2),
-  GAME(3),
-  ONLINE(4),
-  UNKNOWN(5);
+  OFFLINE(),
+  LOBBY(),
+  SELECTION(),
+  GAME(),
+  ONLINE(),
+  UNKNOWN();
 
-  PlayerStatusCode(int code) {
+  private final int code;
+  PlayerStatusCode() {
+    this.code = ordinal();
   }
 }
