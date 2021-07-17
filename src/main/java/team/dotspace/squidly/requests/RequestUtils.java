@@ -28,4 +28,13 @@ public class RequestUtils {
 
     return new APIResponse(response.getStatus(), response.getStatusText(), response.getBody());
   }
+
+  public static APIResponse getMatchPlayerDetails(String matchid, HirezEndpoint endpoint) {
+    var response = new APIRequestBuilder(HirezCommandType.getmatchplayerdetails)
+        .addParameter(RequestParameterType.MATCH_ID, matchid)
+        .changeEndpoint(endpoint)
+        .build();
+
+    return new APIResponse(response.getStatus(), response.getStatusText(), response.getBody());
+  }
 }
