@@ -21,13 +21,20 @@ public record APIResponse(int statusCode, String statusText, JsonNode jsonNode) 
   }
 
   public boolean isSuccess() {
-    return statusCode == 200 &&
-        ((!this.jsonNode.isArray() && this.jsonNode.getObject().getString("ret_msg").equals("Approved") ||
-            this.jsonNode.isArray() && this.jsonNode.getArray() != null));
+    return !isFailure();
   }
 
   public boolean isFailure() {
-    return !this.isSuccess();
+    if (this.statusCode != 200)
+      return true;
+
+    if (this.jsonNode.isArray() && this.jsonNode.getArray() == null || this.jsonNode.getArray().length() < 0)
+      return true;
+
+    if (!this.jsonNode.isArray() && this.jsonNode.getObject() == null || this.jsonNode.getObject().getString("ret_msg").equals("Approved"))
+      return true;
+
+    return false;
   }
 
   public APIResponse ifSuccess(Consumer<APIResponse> responseConsumer) {
