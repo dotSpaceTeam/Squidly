@@ -28,10 +28,10 @@ public record APIResponse(int statusCode, String statusText, JsonNode jsonNode) 
     if (this.statusCode != 200)
       return true;
 
-    if (this.jsonNode.isArray() && this.jsonNode.getArray() == null || this.jsonNode.getArray().length() < 0)
+    if (this.jsonNode.isArray() && (this.jsonNode.getArray() == null || this.jsonNode.getArray().length() < 0))
       return true;
 
-    if (!this.jsonNode.isArray() && this.jsonNode.getObject() == null || this.jsonNode.getObject().getString("ret_msg").equals("Approved"))
+    if (!this.jsonNode.isArray() && (this.jsonNode.getObject() == null || this.jsonNode.getObject().getString("ret_msg").equals("Approved")))
       return true;
 
     return false;
