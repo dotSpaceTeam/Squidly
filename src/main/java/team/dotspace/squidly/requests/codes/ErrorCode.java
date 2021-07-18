@@ -12,7 +12,7 @@ public enum ErrorCode {
   PRIVACY(902),
   OFFLINE(910),
   ONLINE(911),
-  SELECTIMG(912),
+  SELECTING(912),
   UNKNOWN(999);
 
   private final int code;

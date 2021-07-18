@@ -63,7 +63,7 @@ public class RequestUtils {
     return switch (PlayerStatusCode.values()[statusObject.getInt("status")]) {
       case OFFLINE -> new ResponseData(OFFLINE, HirezCommandType.getplayerstatus, endpoint, lastApiResponse);
       case LOBBY, ONLINE -> new ResponseData(ONLINE, HirezCommandType.getplayerstatus, endpoint, lastApiResponse);
-      case SELECTION -> new ResponseData(SELECTIMG, HirezCommandType.getplayerstatus, endpoint, lastApiResponse);
+      case SELECTION -> new ResponseData(SELECTING, HirezCommandType.getplayerstatus, endpoint, lastApiResponse);
       default -> new ResponseData(UNKNOWN, HirezCommandType.getplayerstatus, endpoint, lastApiResponse);
       case GAME -> new ResponseData(SUCCESS, HirezCommandType.getplayerstatus, endpoint, lastApiResponse);
     };
