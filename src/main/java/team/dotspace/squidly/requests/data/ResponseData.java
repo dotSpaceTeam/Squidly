@@ -25,7 +25,7 @@ public record ResponseData(ErrorCode statusCode, HirezCommandType commandType, H
     this.apiResponse = apiResponse;
     this.endpoint = endpoint;
 
-    if (this.statusCode != ErrorCode.SUCCESS)
+    if (this.statusCode == ErrorCode.UNKNOWN)
       SquidlyBot.getInstance().getLogger()
           .error(
               "Error {}: {} after executing {} on endpoint {}. json={}",
