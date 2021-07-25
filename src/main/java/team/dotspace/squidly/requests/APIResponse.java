@@ -8,15 +8,20 @@ package team.dotspace.squidly.requests;
 import kong.unirest.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import team.dotspace.squidly.requests.codes.HirezEndpoint;
+import team.dotspace.squidly.requests.command.HirezCommandType;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public record APIResponse(int statusCode, String statusText, JsonNode jsonNode) {
+public record APIResponse(int statusCode, String statusText, HirezCommandType commandType, HirezEndpoint endpoint,
+                          JsonNode jsonNode) {
 
-  public APIResponse(int statusCode, @NotNull String statusText, @Nullable JsonNode jsonNode) {
+  public APIResponse(int statusCode, @NotNull String statusText, @NotNull HirezCommandType commandType, @NotNull HirezEndpoint endpoint, @Nullable JsonNode jsonNode) {
     this.statusCode = statusCode;
     this.statusText = statusText;
+    this.commandType = commandType;
+    this.endpoint = endpoint;
     this.jsonNode = Objects.requireNonNullElse(jsonNode, new JsonNode("{}"));
   }
 
@@ -37,14 +42,14 @@ public record APIResponse(int statusCode, String statusText, JsonNode jsonNode) 
     return false;
   }
 
-  public APIResponse ifSuccess(Consumer<APIResponse> responseConsumer) {
+  public APIResponse then(Consumer<APIResponse> responseConsumer) {
     if (this.isSuccess())
       responseConsumer.accept(this);
 
     return this;
   }
 
-  public APIResponse ifFailure(Consumer<APIResponse> responseConsumer) {
+  public APIResponse error(Consumer<APIResponse> responseConsumer) {
     if (!this.isSuccess())
       responseConsumer.accept(this);
 
