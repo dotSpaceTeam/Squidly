@@ -5,6 +5,7 @@
 
 package team.dotspace.squidly.requests;
 
+import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
