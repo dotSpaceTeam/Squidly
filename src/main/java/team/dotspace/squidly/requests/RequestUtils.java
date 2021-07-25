@@ -75,7 +75,7 @@ public class RequestUtils {
         .changeEndpoint(endpoint)
         .build();
 
-    return new APIResponse(response.getStatus(), response.getStatusText(), response.getBody());
+    return new APIResponse(response.getStatus(), response.getStatusText(), HirezCommandType.getplayeridbyname, endpoint, response.getBody());
   }
 
   private static APIResponse getPlayerStatus(String playerId, HirezEndpoint endpoint) {
@@ -84,7 +84,7 @@ public class RequestUtils {
         .changeEndpoint(endpoint)
         .build();
 
-    return new APIResponse(response.getStatus(), response.getStatusText(), response.getBody());
+    return new APIResponse(response.getStatus(), response.getStatusText(), HirezCommandType.getplayerstatus, endpoint, response.getBody());
   }
 
   public static APIResponse getMatchPlayerDetails(String matchid, HirezEndpoint endpoint) {
@@ -93,6 +93,6 @@ public class RequestUtils {
         .changeEndpoint(endpoint)
         .build();
 
-    return new APIResponse(response.getStatus(), response.getStatusText(), response.getBody());
+    return new APIResponse(response.getStatus(), response.getStatusText(), HirezCommandType.getmatchplayerdetails, endpoint, response.getBody());
   }
 }
