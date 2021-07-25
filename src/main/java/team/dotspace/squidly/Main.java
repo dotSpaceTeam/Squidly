@@ -23,6 +23,8 @@ public class Main {
           .build();
 
       new SquidlyBot(jda, StartUpValidation.getCREDENTIALS());
+    } else {
+      System.exit(0);
     }
 
   }
