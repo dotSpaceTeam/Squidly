@@ -12,7 +12,7 @@
         <list>
           <option value="run" />
           <option value="--args" />
-          <option value="&quot;\\wsl$\Debian\home\token \\wsl$\Debian\home\credentials.json&quot;" />
+          <option value="&quot;C:\token C:\credentials.json&quot;" />
         </list>
       </option>
       <option name="vmOptions" value="" />
