@@ -13,7 +13,6 @@ import team.dotspace.squidly.requests.codes.HirezEndpoint;
 import team.dotspace.squidly.requests.codes.PlayerStatusCode;
 import team.dotspace.squidly.requests.command.HirezCommandType;
 import team.dotspace.squidly.requests.command.RequestParameterType;
-import team.dotspace.squidly.requests.data.ResponseData;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
