@@ -15,7 +15,20 @@ public enum PlayerStatusCode {
   UNKNOWN();
 
   private final int code;
+
   PlayerStatusCode() {
     this.code = ordinal();
+  }
+
+  public static PlayerStatusCode getFromCode(int code) {
+    for (PlayerStatusCode statusCode : PlayerStatusCode.values()) {
+      if (statusCode.code() == code)
+        return statusCode;
+    }
+    return UNKNOWN;
+  }
+
+  public int code() {
+    return code;
   }
 }
