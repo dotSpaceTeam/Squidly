@@ -7,6 +7,7 @@ package team.dotspace.squidly.requests;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
+import kong.unirest.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
@@ -43,8 +44,15 @@ public record APIResponse(int statusCode, String statusText, HirezCommandType co
     if (this.statusCode != 200)
       return true;
 
-    if (this.jsonNode.isArray() && (this.jsonNode.getArray() == null || this.jsonNode.getArray().length() <= 0))
-      return true;
+    if (this.jsonNode.isArray()) {
+
+      if (this.jsonNode.getArray() == null || this.jsonNode.getArray().length() == 0)
+        return true;
+
+      if (this.jsonNode.getArray() != null && this.jsonNode.getArray().get(0) != null)
+        if (((JSONObject) this.jsonNode.getArray().get(0)).get("ret_msg") != null)
+          return true;
+    }
 
     if (!this.jsonNode.isArray() && (this.jsonNode.getObject() == null || this.jsonNode.getObject().getString("ret_msg").equals("Approved")))
       return true;
@@ -64,5 +72,16 @@ public record APIResponse(int statusCode, String statusText, HirezCommandType co
       responseConsumer.accept(this);
 
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return "APIResponse{" +
+        "statusCode=" + statusCode +
+        ", statusText='" + statusText + '\'' +
+        ", commandType=" + commandType +
+        ", endpoint=" + endpoint +
+        ", jsonNode=" + jsonNode +
+        '}';
   }
 }
