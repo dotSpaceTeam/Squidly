@@ -115,7 +115,7 @@ public class MatchCommandHandler {
 
   private @NotNull List<PaladinsPlayer> mergeIntoPaladinsPlayer(@NotNull List<PaladinsPlayerMatchData> matchData, @NotNull List<PaladinsPlayerData> playerData) {
     List<PaladinsPlayer> playerList = new ArrayList<>();
-    for (int i = 0; i < matchData.size(); i++) {
+    for (int i = 0; i < matchData.size()-1; i++) {
       playerList.add(
           new PaladinsPlayer(playerData.get(i), matchData.get(i))
       );
