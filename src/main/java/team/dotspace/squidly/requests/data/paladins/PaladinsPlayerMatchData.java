@@ -3,14 +3,17 @@
  * Read LICENSE.md for full license agreement.
  */
 
-package team.dotspace.squidly.requests.data;
+package team.dotspace.squidly.requests.data.paladins;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.annotation.processing.Generated;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record PlayerMatchData(
+@Generated("jsonschema2pojo")
+public record PaladinsPlayerMatchData(
     @JsonProperty("Account_Champions_Played") int accountChampionsPlayed,
     @JsonProperty("Account_Level") int accountLevel,
     @JsonProperty("ChampionId") int championId,
