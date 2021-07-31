@@ -58,7 +58,7 @@ public record PaladinsPlayerData(
       @JsonProperty("Name") String name,
       @JsonProperty("Points") long points,
       @JsonProperty("PrevRank") long prevRank,
-      @JsonProperty("Tier") long rank,
+      @JsonProperty("Rank") long rank,
       @JsonProperty("Season") long season,
       @JsonProperty("Tier") long tier,
       @JsonProperty("Trend") long trend,

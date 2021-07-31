@@ -101,7 +101,8 @@ public class MatchCommandHandler {
         for (Object o : response.jsonNode().getArray()) {
           dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerData.class));
         }
-      } catch (JsonProcessingException ignored) {
+      } catch (JsonProcessingException exception) {
+        exception.printStackTrace();
         this.error(response);
         return Optional.empty();
       }
