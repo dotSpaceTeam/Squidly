@@ -24,9 +24,10 @@ public class FormattingFactory {
   public void error(ErrorCode errorCode) {
     this.embedBuilder
         .setColor(Color.RED)
-        .setTitle("Error!")
+        .setTitle("Failure!")
         .getDescriptionBuilder()
-        .append("There was an issue fullfilling your command ")
+        .append("An issue occured fulfilling your command")
+        .append(" ")
         .append(errorCode.name());
 
     this.interactionHook.editOriginalEmbeds(this.embedBuilder.build()).queue();

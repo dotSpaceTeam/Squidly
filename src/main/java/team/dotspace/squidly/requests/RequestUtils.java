@@ -21,8 +21,7 @@ import static team.dotspace.squidly.requests.codes.ErrorCode.*;
 
 public class RequestUtils {
 
-  public static Optional<APIResponse> handleGeneral(final String playerName, final HirezEndpoint endpoint, final InteractionHook interactionHook) {
-    var formattingFactory = new FormattingFactory(interactionHook);
+  public static Optional<APIResponse> handleGeneral(final String playerName, final HirezEndpoint endpoint, final FormattingFactory formattingFactory) {
     var response = new AtomicReference<APIResponse>();
 
     getPlayerId(playerName, endpoint)
