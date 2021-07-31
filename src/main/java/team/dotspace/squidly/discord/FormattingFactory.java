@@ -7,9 +7,13 @@ package team.dotspace.squidly.discord;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import team.dotspace.squidly.SquidlyBot;
 import team.dotspace.squidly.requests.codes.ErrorCode;
+import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class FormattingFactory {
 
@@ -19,6 +23,11 @@ public class FormattingFactory {
   public FormattingFactory(InteractionHook interactionHook) {
     this.embedBuilder = new EmbedBuilder();
     this.interactionHook = interactionHook;
+  }
+
+  public void display(List<PaladinsPlayer> playerList) {
+    //TODO: Format and output
+    SquidlyBot.getInstance().getLogger().info(Arrays.toString(playerList.toArray()));
   }
 
   public void error(ErrorCode errorCode) {

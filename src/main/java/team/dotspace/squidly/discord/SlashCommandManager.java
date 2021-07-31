@@ -52,7 +52,7 @@ public class SlashCommandManager extends ListenerAdapter {
   @Override
   public void onSlashCommand(@NotNull SlashCommandEvent event) {
     switch (event.getName()) {
-      case "match" -> MatchCommandHandler.handleCommand(event);
+      case "match" -> new MatchCommandHandler().handleCommand(event);
       default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
     }
   }
