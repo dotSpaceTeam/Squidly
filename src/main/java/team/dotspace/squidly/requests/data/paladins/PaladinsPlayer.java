@@ -6,7 +6,7 @@
 package team.dotspace.squidly.requests.data.paladins;
 
 public record PaladinsPlayer(
-    PaladinsPlayerData paladinsPlayerData,
+    PaladinsPlayerData playerData,
     PaladinsPlayerMatchData matchData) {
 
 }
