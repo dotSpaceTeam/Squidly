@@ -6,11 +6,11 @@
 package team.dotspace.squidly.requests;
 
 import kong.unirest.json.JSONObject;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import team.dotspace.squidly.SquidlyBot;
 import team.dotspace.squidly.discord.FormattingFactory;
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
 import team.dotspace.squidly.requests.codes.PlayerStatusCode;
+import team.dotspace.squidly.requests.codes.Queue;
 import team.dotspace.squidly.requests.command.HirezCommandType;
 import team.dotspace.squidly.requests.command.RequestParameterType;
 
@@ -64,7 +64,10 @@ public class RequestUtils {
                 if (et != SUCCESS) return;
 
                 var queueId = playerStatusObj.getInt("match_queue_id");
-                //Todo: Validate queue to be a non custom game.
+                if (!Queue.consideredQueues.contains(queueId)) {
+                  formattingFactory.error(UNCONSIDERD);
+                  return;
+                }
 
                 response.set(playerStatusRes);
 
@@ -72,9 +75,9 @@ public class RequestUtils {
 
 
         }).error(res -> {
-      RequestUtils.error(res);
-      formattingFactory.error(PLAYER_NOT_FOUND);
-    });
+          RequestUtils.error(res);
+          formattingFactory.error(PLAYER_NOT_FOUND);
+        });
 
 
     return Optional.ofNullable(response.get());

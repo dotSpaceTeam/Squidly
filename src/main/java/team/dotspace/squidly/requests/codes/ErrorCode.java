@@ -13,6 +13,7 @@ public enum ErrorCode {
   OFFLINE(910),
   ONLINE(911),
   SELECTING(912),
+  UNCONSIDERD(920),
   UNKNOWN(999);
 
   private final int code;
