@@ -5,6 +5,8 @@
 
 package team.dotspace.squidly.requests.codes;
 
+import java.util.List;
+
 public enum Queue {
   UNKOWN(0),
 
@@ -21,6 +23,10 @@ public enum Queue {
   //SMITE
   //TODO:
 
+  public static List<Integer> consideredQueues = List.of(
+      /* Pala -->  */424, 428, 437, 452, 465, 469, 486,
+      /* Smite --> */ 423, 426, 430, 433, 435, 440, 445, 448, 451, 452, 459, 466, 450, 502, 503, 504
+  );
 
   private final int id;
 
@@ -34,6 +40,10 @@ public enum Queue {
         return value;
     }
     return UNKOWN;
+  }
+
+  public boolean isConsidered() {
+    return consideredQueues.contains(id);
   }
 
   public int id() {
