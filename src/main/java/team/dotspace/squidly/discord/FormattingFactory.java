@@ -7,12 +7,12 @@ package team.dotspace.squidly.discord;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import team.dotspace.squidly.SquidlyBot;
 import team.dotspace.squidly.requests.codes.ErrorCode;
+import team.dotspace.squidly.requests.codes.Queue;
+import team.dotspace.squidly.requests.codes.Tier;
 import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 
 public class FormattingFactory {
@@ -26,8 +26,49 @@ public class FormattingFactory {
   }
 
   public void display(List<PaladinsPlayer> playerList) {
-    //TODO: Format and output
-    SquidlyBot.getInstance().getLogger().info(Arrays.toString(playerList.toArray()));
+    var queue = Queue.getFromId(Integer.parseInt(playerList.get(0).matchData().queue()));
+    this.embedBuilder
+        .setTitle(queue.toString())
+        .addField("Team 1", "", false);
+
+    int lastTeam = playerList.get(0).matchData().taskForce();
+    for (PaladinsPlayer player : playerList) {
+      var playerData = player.playerData();
+      var matchData = player.matchData();
+
+      if (lastTeam != matchData.taskForce()) {
+        this.embedBuilder
+            .addBlankField(false)
+            .addField("Team 2", "", false);
+      }
+      lastTeam = matchData.taskForce();
+
+      this.embedBuilder
+          .addField(
+              matchData.playerName() + " (Lvl. " + matchData.accountLevel() + ")",
+              """
+                  ```excel
+                  %s(%s)
+                  ||%s||
+                                    
+                  %s
+                  %sh played
+                  %s/%s Champions played
+                  ```
+                  """
+                  .formatted(
+                      matchData.championName(),
+                      matchData.championLevel(),
+                      playerData.title(),
+                      Tier.getRankFromId(playerData.tierRankedKBM()).toString(),
+                      playerData.hoursPlayed(),
+                      matchData.accountChampionsPlayed(),
+                      50 //TODO get all champion count
+                  ),
+              true);
+    }
+
+    this.interactionHook.editOriginalEmbeds(embedBuilder.build()).queue();
   }
 
   public void error(ErrorCode errorCode) {
