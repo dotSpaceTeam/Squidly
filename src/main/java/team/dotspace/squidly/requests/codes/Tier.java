@@ -42,7 +42,7 @@ public enum Tier {
     this.id = ordinal();
   }
 
-  public static Tier getRankFromId(int id) {
+  public static Tier getRankFromId(long id) {
     for (Tier value : Tier.values()) {
       if (value.id() == id)
         return value;
