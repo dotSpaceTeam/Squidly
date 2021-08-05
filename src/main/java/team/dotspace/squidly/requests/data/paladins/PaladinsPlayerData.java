@@ -67,4 +67,82 @@ public record PaladinsPlayerData(
       @JsonProperty("ret_msg") Object retMsg
   ) {
   }
+
+  /**
+   * Empty Json Reponse used for private accounts
+   */
+  public static String MOCK_PRIVATE = """
+        {
+          "ActivePlayerId": 00,
+          "Created_Datetime": "",
+          "HoursPlayed": 0,
+          "Id": 00,
+          "Last_Login_Datetime": "",
+          "Leaves": 0,
+          "Level": 0,
+          "Losses": 0,
+          "MasteryLevel": 0,
+          "MergedPlayers": null,
+          "Name": "Private",
+          "Personal_Status_Message": "",
+          "Platform": "None",
+          "RankedConquest": {
+            "Leaves": 0,
+            "Losses": 0,
+            "Name": "Conquest",
+            "Points": 0,
+            "PrevRank": 0,
+            "Rank": 0,
+            "Season": 0,
+            "Tier": 0,
+            "Trend": 0,
+            "Wins": 0,
+            "player_id": null,
+            "ret_msg": null
+          },
+          "RankedController": {
+            "Leaves": 0,
+            "Losses": 0,
+            "Name": "Ranked Controller",
+            "Points": 0,
+            "PrevRank": 0,
+            "Rank": 0,
+            "Season": 0,
+            "Tier": 0,
+            "Trend": 0,
+            "Wins": 0,
+            "player_id": null,
+            "ret_msg": null
+          },
+          "RankedKBM": {
+            "Leaves": 0,
+            "Losses": 0,
+            "Name": "Ranked KBM",
+            "Points": 0,
+            "PrevRank": 0,
+            "Rank": 0,
+            "Season": 0,
+            "Tier": 0,
+            "Trend": 0,
+            "Wins": 0,
+            "player_id": null,
+            "ret_msg": null
+          },
+          "Region": "None",
+          "TeamId": 0,
+          "Team_Name": "",
+          "Tier_Conquest": 0,
+          "Tier_RankedController": 0,
+          "Tier_RankedKBM": 0,
+          "Total_Achievements": 0,
+          "Total_Worshippers": 0,
+          "Total_XP": 0,
+          "Wins": 0,
+          "hz_gamer_tag": null,
+          "hz_player_name": "Private",
+          "ret_msg": null
+        }
+        """;
+
+
 }
