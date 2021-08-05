@@ -27,48 +27,55 @@ public class FormattingFactory {
 
   public void display(List<PaladinsPlayer> playerList) {
     var queue = Queue.getFromId(Integer.parseInt(playerList.get(0).matchData().queue()));
+
     this.embedBuilder
         .setTitle(queue.toString())
         .addField("Team 1", "", false);
 
-    int lastTeam = playerList.get(0).matchData().taskForce();
-    for (PaladinsPlayer player : playerList) {
-      var playerData = player.playerData();
-      var matchData = player.matchData();
+    playerList
+        .stream()
+        .filter(paladinsPlayer -> paladinsPlayer.matchData().taskForce() == 1)
+        .forEachOrdered(this::displayPalaPlayer);
 
-      if (lastTeam != matchData.taskForce()) {
-        this.embedBuilder
-            .addBlankField(false)
-            .addField("Team 2", "", false);
-      }
-      lastTeam = matchData.taskForce();
+    this.embedBuilder
+        .addBlankField(false)
+        .addField("Team 2", "", false);
 
-      this.embedBuilder
-          .addField(
-              matchData.playerName() + " (Lvl. " + matchData.accountLevel() + ")",
-              """
-                  ```excel
-                  %s(%s)
-                  ||%s||
-                                    
-                  %s
-                  %sh played
-                  %s/%s Champions played
-                  ```
-                  """
-                  .formatted(
-                      matchData.championName(),
-                      matchData.championLevel(),
-                      playerData.title(),
-                      Tier.getRankFromId(playerData.tierRankedKBM()).toString(),
-                      playerData.hoursPlayed(),
-                      matchData.accountChampionsPlayed(),
-                      50 //TODO get all champion count
-                  ),
-              true);
-    }
+    playerList
+        .stream()
+        .filter(paladinsPlayer -> paladinsPlayer.matchData().taskForce() == 2)
+        .forEachOrdered(this::displayPalaPlayer);
 
     this.interactionHook.editOriginalEmbeds(embedBuilder.build()).queue();
+  }
+
+  private void displayPalaPlayer(PaladinsPlayer player) {
+    var playerData = player.playerData();
+    var matchData = player.matchData();
+
+    this.embedBuilder
+        .addField(
+            matchData.playerName() + " (Lvl. " + matchData.accountLevel() + ")",
+            """
+                ```excel
+                %s(%s)
+                ||%s||
+                                  
+                %s
+                %sh played
+                %s/%s Champions played
+                ```
+                """
+                .formatted(
+                    matchData.championName(),
+                    matchData.championLevel(),
+                    playerData.title(),
+                    Tier.getRankFromId(playerData.tierRankedKBM()).toString(),
+                    playerData.hoursPlayed(),
+                    matchData.accountChampionsPlayed(),
+                    50 //TODO get all champion count
+                ),
+            true);
   }
 
   public void error(ErrorCode errorCode) {
