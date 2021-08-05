@@ -59,11 +59,12 @@ public class FormattingFactory {
             """
                 ```excel
                 %s(%s)
-                ||%s||
+                "%s"
                                   
                 %s
+                
                 %sh played
-                %s/%s Champions played
+                %s/%s Champions
                 ```
                 """
                 .formatted(
