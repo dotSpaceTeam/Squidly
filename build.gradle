@@ -8,8 +8,9 @@ version '1.0-SNAPSHOT'
 
 ext {
     JDA_VERSION = '4.3.0_277'
-    SLF4J_VERSION = '1.7.30'
-    JACKSON_VERSION = '2.12.3'
+    SLF4J_VERSION = '1.7.32'
+    JACKSON_VERSION = '2.12.4'
+    UNIREST_VERSION = '3.11.12'
 }
 
 repositories {
@@ -24,7 +25,7 @@ dependencies {
     implementation "net.dv8tion:JDA:${JDA_VERSION}"
     implementation "org.slf4j:slf4j-simple:${SLF4J_VERSION}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
-    implementation "com.konghq:unirest-java:3.11.09:standalone"
+    implementation "com.konghq:unirest-java:${UNIREST_VERSION}:standalone"
 }
 
 
