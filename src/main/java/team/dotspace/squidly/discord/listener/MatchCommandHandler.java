@@ -20,7 +20,6 @@ import team.dotspace.squidly.requests.data.paladins.PaladinsPlayerData;
 import team.dotspace.squidly.requests.data.paladins.PaladinsPlayerMatchData;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,8 +75,6 @@ public class MatchCommandHandler {
         for (Object o : response.jsonNode().getArray())
           dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerMatchData.class));
 
-        dataList.sort(Comparator.comparingInt(PaladinsPlayerMatchData::taskForce));
-
       } catch (JsonProcessingException ignored) {
         this.error(response);
         return Optional.empty();
@@ -94,11 +91,25 @@ public class MatchCommandHandler {
   private @NotNull Optional<List<PaladinsPlayerData>> getPlayerData(@NotNull String playerIds) {
     var response = RequestUtils.getPlayerDetailsBatch(playerIds, endpoint);
 
+    var privateIndexes = new ArrayList<Integer>();
+
+    var playerIdArray = playerIds.split(",");
+    for (int i = 0; i < playerIdArray.length; i++) {
+      var id = playerIdArray[i];
+      if (id.equals("0"))
+        privateIndexes.add(i);
+    }
+
     if (response.isSuccess()) {
       List<PaladinsPlayerData> dataList = new ArrayList<>();
       try {
         var ojectMapper = new ObjectMapper();
+        int i = 0;
         for (Object o : response.jsonNode().getArray()) {
+
+          if (privateIndexes.contains(i))
+            dataList.add(ojectMapper.readValue(PaladinsPlayerData.MOCK_PRIVATE, PaladinsPlayerData.class));
+
           dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerData.class));
         }
       } catch (JsonProcessingException exception) {
@@ -115,7 +126,7 @@ public class MatchCommandHandler {
 
   private @NotNull List<PaladinsPlayer> mergeIntoPaladinsPlayer(@NotNull List<PaladinsPlayerMatchData> matchData, @NotNull List<PaladinsPlayerData> playerData) {
     List<PaladinsPlayer> playerList = new ArrayList<>();
-    for (int i = 0; i < matchData.size()-1; i++) {
+    for (int i = 0; i < matchData.size(); i++) {
       playerList.add(
           new PaladinsPlayer(playerData.get(i), matchData.get(i))
       );
