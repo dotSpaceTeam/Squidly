@@ -76,7 +76,7 @@ public class RequestUtils {
 
         }).error(res -> {
           RequestUtils.error(res);
-          formattingFactory.error(UNKNOWN);
+          formattingFactory.error(PLAYER_NOT_FOUND);
         });
 
 
