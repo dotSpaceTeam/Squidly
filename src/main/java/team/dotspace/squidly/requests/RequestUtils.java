@@ -65,7 +65,7 @@ public class RequestUtils {
 
                 var queueId = playerStatusObj.getInt("match_queue_id");
                 if (!Queue.consideredQueues.contains(queueId)) {
-                  formattingFactory.error(UNCONSIDERD);
+                  formattingFactory.error(UNCONSIDERED);
                   return;
                 }
 
