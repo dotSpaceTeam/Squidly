@@ -71,12 +71,12 @@ public record PaladinsPlayerData(
   /**
    * Empty Json Reponse used for private accounts
    */
-  public static String MOCK_PRIVATE = """
+  public static final String MOCK_PRIVATE = """
         {
-          "ActivePlayerId": 00,
+          "ActivePlayerId": 0,
           "Created_Datetime": "",
           "HoursPlayed": 0,
-          "Id": 00,
+          "Id": 0,
           "Last_Login_Datetime": "",
           "Leaves": 0,
           "Level": 0,
