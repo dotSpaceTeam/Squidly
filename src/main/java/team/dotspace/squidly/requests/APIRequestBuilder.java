@@ -19,6 +19,8 @@ import team.dotspace.squidly.requests.command.RequestParameterType;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class APIRequestBuilder {
 
@@ -57,15 +59,10 @@ public class APIRequestBuilder {
     this.parameterMap.put(RequestParameterType.TIMESTAMP, getTimestamp());
     this.parameterMap.put(RequestParameterType.SESSION, getSession());
 
-    var stringBuilder = new StringBuilder(this.endpoint.getUrl());
-    stringBuilder.append(this.commandType.name()).append("json").append("/");
-
-    for (var type : commandType.getRequiredTypes()) {
-      stringBuilder.append(parameterMap.get(type)).append("/");
-    }
-    var s = stringBuilder.toString();
-
-    return s.substring(0, s.length() - 1);
+    return Arrays
+        .stream(commandType.getRequiredTypes())
+        .map(type -> parameterMap.get(type))
+        .collect(Collectors.joining("/", this.endpoint.getUrl() + this.commandType.name() + "json/", ""));
   }
 
   public HttpResponse<JsonNode> build() {
