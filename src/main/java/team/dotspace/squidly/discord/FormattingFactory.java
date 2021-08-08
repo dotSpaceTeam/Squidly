@@ -13,6 +13,7 @@ import team.dotspace.squidly.requests.codes.Tier;
 import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
 
 import java.awt.*;
+import java.util.Comparator;
 import java.util.List;
 
 public class FormattingFactory {
@@ -47,6 +48,7 @@ public class FormattingFactory {
         .forEachOrdered(this::displayPalaPlayer);
 
     this.interactionHook.editOriginalEmbeds(embedBuilder.build()).queue();
+    this.embedBuilder.clear();
   }
 
   private void displayPalaPlayer(PaladinsPlayer player) {
@@ -89,5 +91,6 @@ public class FormattingFactory {
         .append(errorCode.name());
 
     this.interactionHook.editOriginalEmbeds(this.embedBuilder.build()).queue();
+    this.embedBuilder.clear();
   }
 }
