@@ -14,14 +14,15 @@ import team.dotspace.squidly.SquidlyBot;
 import team.dotspace.squidly.discord.FormattingFactory;
 import team.dotspace.squidly.requests.APIResponse;
 import team.dotspace.squidly.requests.RequestUtils;
+import team.dotspace.squidly.requests.codes.ErrorCode;
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
 import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
 import team.dotspace.squidly.requests.data.paladins.PaladinsPlayerData;
 import team.dotspace.squidly.requests.data.paladins.PaladinsPlayerMatchData;
+import team.dotspace.squidly.requests.data.smite.SmitePlayerData;
+import team.dotspace.squidly.requests.data.smite.SmitePlayerMatchData;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MatchCommandHandler {
@@ -44,43 +45,53 @@ public class MatchCommandHandler {
             var statusObject = (JSONObject) responseData.jsonNode().getArray().get(0);
 
             this.getMatchPlayerData(statusObject)
-                .ifPresent(playerMatchDataList -> {
+                .ifPresent(matchDataArray -> {
 
-                  var playerids = playerMatchDataList
-                      .stream()
-                      .map(PaladinsPlayerMatchData::playerId)
-                      .collect(Collectors.joining(","));
+                  if (matchDataArray instanceof PaladinsPlayerMatchData[] dataArray) {
 
-                  this.getPlayerData(playerids).ifPresent(playerDataList -> {
+                    var playerids = Arrays
+                        .stream(dataArray)
+                        .map(PaladinsPlayerMatchData::playerId)
+                        .collect(Collectors.joining(","));
 
-                    var players = this.mergeIntoPaladinsPlayer(playerMatchDataList, playerDataList);
+                    this.getPlayerData(playerids).ifPresent(playerDataList -> {
+                      var players = this.mergeIntoPaladinsPlayer(dataArray, (PaladinsPlayerData[]) playerDataList);
+                      this.formattingFactory.display(players);
+                    });
+                  }
 
-                    this.formattingFactory.display(players);
+                  if (matchDataArray instanceof SmitePlayerMatchData[] dataArray) {
 
-                  });
+                  }
                 });
           });
     });
   }
 
 
-  private @NotNull Optional<List<PaladinsPlayerMatchData>> getMatchPlayerData(@NotNull JSONObject statusObject) {
+  private @NotNull Optional<Object[]> getMatchPlayerData(@NotNull JSONObject statusObject) {
     var response = RequestUtils.getMatchPlayerDetails(statusObject.getString("Match"), this.endpoint);
 
     if (response.isSuccess()) {
-      List<PaladinsPlayerMatchData> dataList = new ArrayList<>();
-      try {
-        var ojectMapper = new ObjectMapper();
+      List<Object> dataList = new ArrayList<>();
+      var ojectMapper = new ObjectMapper();
 
-        for (Object o : response.jsonNode().getArray())
-          dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerMatchData.class));
+      for (Object o : response.jsonNode().getArray())
+        try {
+          switch (this.endpoint) {
+            case PALADINS -> dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerMatchData.class));
+            case SMITE -> dataList.add(ojectMapper.readValue(o.toString(), SmitePlayerMatchData.class));
+          }
+        } catch (JsonProcessingException exception) {
+          exception.printStackTrace();
+          this.error(response);
+          return Optional.empty();
+        }
 
-      } catch (JsonProcessingException ignored) {
-        this.error(response);
-        return Optional.empty();
-      }
-
-      return Optional.of(dataList);
+      return switch (this.endpoint) {
+        default -> Optional.of(dataList.toArray(new PaladinsPlayerMatchData[1]));
+        case SMITE -> Optional.of(dataList.toArray(new SmitePlayerMatchData[1]));
+      };
 
     } else this.error(response);
 
@@ -88,51 +99,58 @@ public class MatchCommandHandler {
     return Optional.empty();
   }
 
-  private @NotNull Optional<List<PaladinsPlayerData>> getPlayerData(@NotNull String playerIds) {
+  //TODO Rework for smite
+  private @NotNull Optional<Object[]> getPlayerData(@NotNull String playerIds) {
     var response = RequestUtils.getPlayerDetailsBatch(playerIds, endpoint);
 
-    var privateIndexes = new ArrayList<Integer>();
-
-    var playerIdArray = playerIds.split(",");
-    for (int i = 0; i < playerIdArray.length; i++) {
-      var id = playerIdArray[i];
-      if (id.equals("0"))
-        privateIndexes.add(i);
-    }
-
     if (response.isSuccess()) {
-      List<PaladinsPlayerData> dataList = new ArrayList<>();
+
+      List<Object> dataList = new ArrayList<>();
+
       try {
         var ojectMapper = new ObjectMapper();
-        int i = 0;
-        for (Object o : response.jsonNode().getArray()) {
 
-          if (privateIndexes.contains(i))
-            dataList.add(ojectMapper.readValue(PaladinsPlayerData.MOCK_PRIVATE, PaladinsPlayerData.class));
+        for (Object o : response.jsonNode().getArray())
+          switch (this.endpoint) {
+            case PALADINS -> dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerData.class));
+            case SMITE -> {
+              this.error(response);
+              this.formattingFactory.error(ErrorCode.UNKNOWN);
+            }
+          }
 
-          dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerData.class));
-        }
       } catch (JsonProcessingException exception) {
         exception.printStackTrace();
         this.error(response);
         return Optional.empty();
       }
 
-      return Optional.of(dataList);
+      return switch (this.endpoint) {
+        default -> Optional.of(dataList.toArray(new PaladinsPlayerData[0]));
+        case SMITE -> Optional.of(dataList.toArray(new SmitePlayerData[0]));
+      };
     } else this.error(response);
 
     return Optional.empty();
   }
 
-  private @NotNull List<PaladinsPlayer> mergeIntoPaladinsPlayer(@NotNull List<PaladinsPlayerMatchData> matchData, @NotNull List<PaladinsPlayerData> playerData) {
-    List<PaladinsPlayer> playerList = new ArrayList<>();
-    for (int i = 0; i < matchData.size(); i++) {
-      playerList.add(
-          new PaladinsPlayer(playerData.get(i), matchData.get(i))
-      );
-    }
+  private @NotNull List<PaladinsPlayer> mergeIntoPaladinsPlayer(@NotNull PaladinsPlayerMatchData[] matchDataArray, @NotNull PaladinsPlayerData[] playerDataArray) {
+    var map = new HashMap<String, PaladinsPlayerData>();
+    var result = new ArrayList<PaladinsPlayer>();
 
-    return playerList;
+    //Fill map with ids and corresponding playerData
+    Arrays.stream(matchDataArray)
+        .forEachOrdered(matchData ->
+                     Arrays.stream(playerDataArray)
+                         .filter(playerData -> String.valueOf(playerData.activePlayerId()).equals(matchData.playerId()))
+                         .findFirst().ifPresent(playerData -> map.put(matchData.playerId(), playerData)));
+
+    //Lookup playerData from map and merge into paladinsPlayer object
+    Arrays.stream(matchDataArray).forEachOrdered(matchData -> result.add(new PaladinsPlayer(
+        map.getOrDefault(matchData.playerId(), PaladinsPlayerData.MOCK_PRIVATE),
+        matchData)));
+
+    return result;
   }
 
   private void error(@NotNull APIResponse apiResponse) {
