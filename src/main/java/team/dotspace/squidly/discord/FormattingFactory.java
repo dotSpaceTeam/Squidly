@@ -13,7 +13,6 @@ import team.dotspace.squidly.requests.codes.Tier;
 import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
 
 import java.awt.*;
-import java.util.Comparator;
 import java.util.List;
 
 public class FormattingFactory {
@@ -47,6 +46,12 @@ public class FormattingFactory {
         .filter(paladinsPlayer -> paladinsPlayer.matchData().taskForce() == 2)
         .forEachOrdered(this::displayPalaPlayer);
 
+    this.embedBuilder
+        .setFooter("""
+                       h = hours; w =wins; l = losses; q = quits;
+                       Data provided by Hi-Rez. © 2021 Hi-Rez Studios, Inc. All rights reserved.
+                       """, "https://raw.githubusercontent.com/luissilva1044894/hirez-api-docs/master/.assets/paladins/avatar/24355.png");
+
     this.interactionHook.editOriginalEmbeds(embedBuilder.build()).queue();
     this.embedBuilder.clear();
   }
@@ -64,16 +69,21 @@ public class FormattingFactory {
                 "%s"
                                   
                 %s
-                
+                                
+                %sw/%sl/%sq
+                                
                 %sh played
-                %s/%s Champions
+                %s/%s champions
                 ```
                 """
                 .formatted(
                     matchData.championName(),
                     matchData.championLevel(),
-                    playerData.title(),
+                    playerData.title() == null ? "" : playerData.title(),
                     Tier.getRankFromId(playerData.tierRankedKBM()).toString(),
+                    matchData.tierWins(),
+                    matchData.tierLosses(),
+                    playerData.leaves(),
                     playerData.hoursPlayed(),
                     matchData.accountChampionsPlayed(),
                     50 //TODO get all champion count

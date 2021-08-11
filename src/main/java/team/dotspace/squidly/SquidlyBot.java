@@ -36,7 +36,7 @@ public class SquidlyBot {
   private void initialize() {
     this.sessionHandler = new HirezSessionHandler();
     this.slashCommandManager = new SlashCommandManager();
-    this.jda.getPresence().setPresence(Activity.competing("Silver League"), true);
+    this.jda.getPresence().setPresence(Activity.competing("Gold League"), true);
     this.jda.addEventListener(slashCommandManager, new PrivateChatListener());
   }
 
