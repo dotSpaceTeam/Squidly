@@ -47,7 +47,7 @@ public class APIRequestBuilder {
   }
 
   public APIRequestBuilder changeEndpoint(HirezEndpoint endpoint) {
-    if (this.endpoint != HirezEndpoint.ANY)
+    if (this.endpoint != HirezEndpoint.ANY && this.endpoint != endpoint)
       SquidlyBot.getInstance().getLogger().error("Arborted chaning endpoint. {} is {} only!", this.commandType.name(), this.commandType.getEndpoint());
     this.endpoint = endpoint;
     return this;
