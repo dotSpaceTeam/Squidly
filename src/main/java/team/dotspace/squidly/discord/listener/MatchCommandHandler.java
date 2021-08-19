@@ -10,9 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.json.JSONObject;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.jetbrains.annotations.NotNull;
-import team.dotspace.squidly.SquidlyBot;
 import team.dotspace.squidly.discord.FormattingFactory;
-import team.dotspace.squidly.requests.APIResponse;
 import team.dotspace.squidly.requests.RequestUtils;
 import team.dotspace.squidly.requests.codes.ErrorCode;
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
@@ -84,7 +82,6 @@ public class MatchCommandHandler {
           }
         } catch (JsonProcessingException exception) {
           exception.printStackTrace();
-          this.error(response);
           return Optional.empty();
         }
 
@@ -93,7 +90,7 @@ public class MatchCommandHandler {
         case SMITE -> Optional.of(dataList.toArray(new SmitePlayerMatchData[1]));
       };
 
-    } else this.error(response);
+    }
 
 
     return Optional.empty();
@@ -118,7 +115,6 @@ public class MatchCommandHandler {
 
       } catch (JsonProcessingException exception) {
         exception.printStackTrace();
-        this.error(response);
         return Optional.empty();
       }
 
@@ -126,7 +122,7 @@ public class MatchCommandHandler {
         default -> Optional.of(dataList.toArray(new PaladinsPlayerData[0]));
         case SMITE -> Optional.of(dataList.toArray(new SmitePlayerData[0]));
       };
-    } else this.error(response);
+    }
 
     return Optional.empty();
   }
@@ -148,17 +144,6 @@ public class MatchCommandHandler {
         matchData)));
 
     return result;
-  }
-
-  private void error(@NotNull APIResponse apiResponse) {
-    SquidlyBot.getInstance().getLogger().error(
-        "Error {}: {} after executing {} on endpoint {}. json={}",
-        apiResponse.statusCode(),
-        apiResponse.statusText(),
-        apiResponse.commandType().name(),
-        apiResponse.endpoint().name(),
-        apiResponse.jsonNode().toPrettyString()
-    );
   }
 
 }
