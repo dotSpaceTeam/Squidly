@@ -29,6 +29,6 @@ public enum ErrorCode {
 
   @Override
   public String toString() {
-    return name().toLowerCase().replaceAll("[_]", " ");
+    return name().toUpperCase().replaceAll("[_]", " ");
   }
 }
