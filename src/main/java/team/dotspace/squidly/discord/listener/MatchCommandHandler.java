@@ -113,10 +113,7 @@ public class MatchCommandHandler {
         for (Object o : response.jsonNode().getArray())
           switch (this.endpoint) {
             case PALADINS -> dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerData.class));
-            case SMITE -> {
-              this.error(response);
-              this.formattingFactory.error(ErrorCode.UNKNOWN);
-            }
+            case SMITE -> this.formattingFactory.withErrorCode("", ErrorCode.WORK_IN_PROGRESS);
           }
 
       } catch (JsonProcessingException exception) {

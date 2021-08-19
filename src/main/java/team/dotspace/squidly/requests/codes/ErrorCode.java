@@ -14,6 +14,7 @@ public enum ErrorCode {
   ONLINE(911),
   SELECTING(912),
   UNCONSIDERED(920),
+  WORK_IN_PROGRESS(998),
   UNKNOWN(999);
 
   private final int code;
@@ -24,5 +25,10 @@ public enum ErrorCode {
 
   public int code() {
     return code;
+  }
+
+  @Override
+  public String toString() {
+    return name().toLowerCase().replaceAll("[_]", " ");
   }
 }

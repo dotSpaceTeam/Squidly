@@ -6,7 +6,6 @@
 package team.dotspace.squidly.requests;
 
 import kong.unirest.json.JSONObject;
-import team.dotspace.squidly.SquidlyBot;
 import team.dotspace.squidly.discord.FormattingFactory;
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
 import team.dotspace.squidly.requests.codes.PlayerStatusCode;
@@ -34,7 +33,7 @@ public class RequestUtils {
           var playerId = ((JSONObject) playerIdRes.jsonNode().getArray().get(0)).getString("player_id");
 
           if (privacyMode.equals("y")) {
-            formattingFactory.error(PRIVACY);
+            formattingFactory.withErrorCode(playerName, PRIVACY);
             return;
           }
 
@@ -44,19 +43,19 @@ public class RequestUtils {
 
                 var et = switch (PlayerStatusCode.getFromCode(playerStatusObj.getInt("status"))) {
                   case LOBBY, ONLINE -> {
-                    formattingFactory.error(ONLINE);
+                    formattingFactory.withErrorCode(playerName, ONLINE);
                     yield ONLINE;
                   }
                   case SELECTION -> {
-                    formattingFactory.error(SELECTING);
+                    formattingFactory.withErrorCode(playerName, SELECTING);
                     yield SELECTING;
                   }
                   case OFFLINE -> {
-                    formattingFactory.error(OFFLINE);
+                    formattingFactory.withErrorCode(playerName, OFFLINE);
                     yield OFFLINE;
                   }
                   default -> {
-                    formattingFactory.error(PLAYER_NOT_FOUND);
+                    formattingFactory.withErrorCode(playerName, PLAYER_NOT_FOUND);
                     yield PLAYER_NOT_FOUND;
                   }
                   case GAME -> SUCCESS;
@@ -65,19 +64,16 @@ public class RequestUtils {
 
                 var queueId = playerStatusObj.getInt("match_queue_id");
                 if (!Queue.consideredQueues.contains(queueId)) {
-                  formattingFactory.error(UNCONSIDERED);
+                  formattingFactory.withErrorCode(playerName, UNCONSIDERED);
                   return;
                 }
 
                 response.set(playerStatusRes);
 
-              }).error(RequestUtils::error);
+              });
 
 
-        }).error(res -> {
-          RequestUtils.error(res);
-          formattingFactory.error(PLAYER_NOT_FOUND);
-        });
+        }).error(res -> formattingFactory.withErrorCode(playerName, PLAYER_NOT_FOUND));
 
 
     return Optional.ofNullable(response.get());
@@ -128,14 +124,4 @@ public class RequestUtils {
     return new APIResponse(response.getStatus(), response.getStatusText(), HirezCommandType.getplayerbatch, endpoint, response.getBody());
   }
 
-  private static void error(APIResponse apiResponse) {
-    SquidlyBot.getInstance().getLogger().error(
-        "Error {}: {} after executing {} on endpoint {}. json={}",
-        apiResponse.statusCode(),
-        apiResponse.statusText(),
-        apiResponse.commandType().name(),
-        apiResponse.endpoint().name(),
-        apiResponse.jsonNode().toPrettyString()
-    );
-  }
 }

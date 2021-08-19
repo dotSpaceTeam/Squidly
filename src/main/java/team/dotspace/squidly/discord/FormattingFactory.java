@@ -17,12 +17,17 @@ import java.util.List;
 
 public class FormattingFactory {
 
+  public static final String SQUIDLY_ICON = "https://raw.githubusercontent.com/luissilva1044894/hirez-api-docs/master/.assets/paladins/avatar/24355.png";
   private final EmbedBuilder embedBuilder;
   private final InteractionHook interactionHook;
 
   public FormattingFactory(InteractionHook interactionHook) {
-    this.embedBuilder = new EmbedBuilder();
     this.interactionHook = interactionHook;
+    this.embedBuilder = new EmbedBuilder()
+        .setFooter("""
+                       Squidly is powered by dotSpace Development.
+                       Data provided by Hi-Rez. © 2021 Hi-Rez Studios, Inc. All rights reserved.
+                       """, this.interactionHook.getInteraction().getUser().getAvatarUrl());
   }
 
   public void display(List<PaladinsPlayer> playerList) {
@@ -46,12 +51,6 @@ public class FormattingFactory {
         .filter(paladinsPlayer -> paladinsPlayer.matchData().taskForce() == 2)
         .forEachOrdered(this::displayPalaPlayer);
 
-    this.embedBuilder
-        .setFooter("""
-                       h = hours; w =wins; l = losses; q = quits;
-                       Data provided by Hi-Rez. © 2021 Hi-Rez Studios, Inc. All rights reserved.
-                       """, "https://raw.githubusercontent.com/luissilva1044894/hirez-api-docs/master/.assets/paladins/avatar/24355.png");
-
     this.interactionHook.editOriginalEmbeds(embedBuilder.build()).queue();
     this.embedBuilder.clear();
   }
@@ -70,7 +69,8 @@ public class FormattingFactory {
                                   
                 %s
                                 
-                %sw/%sl/%sq
+                %sw/%sl
+                %s quits
                                 
                 %sh played
                 %s/%s champions
@@ -91,14 +91,39 @@ public class FormattingFactory {
             true);
   }
 
-  public void error(ErrorCode errorCode) {
+  public void withErrorCode(String playerName, ErrorCode errorCode) {
     this.embedBuilder
         .setColor(Color.RED)
-        .setTitle("Failure!")
-        .getDescriptionBuilder()
-        .append("An issue occured fulfilling your command")
-        .append(" ")
-        .append(errorCode.name());
+        .setTitle(errorCode.code() + " " + errorCode);
+
+    switch (errorCode) {
+      case OFFLINE, ONLINE -> this.embedBuilder
+          .setDescription("""
+                              Could not retrieve the requested data :c
+                              The player %s is not in a match!
+                              """.formatted(playerName));
+      case PRIVACY -> this.embedBuilder.setDescription("""
+                                                           Could not retrieve the requested data :c
+                                                           The player %s has a private profile!
+                                                           """.formatted(playerName));
+      case SELECTING -> this.embedBuilder
+          .setDescription("""
+                              Could not retrieve the requested data :c
+                              The player %s is selecting.. Try again in a moment!
+                              """.formatted(playerName));
+      case UNCONSIDERED -> this.embedBuilder
+          .setDescription("""
+                              Could not retrieve the requested data :c
+                              The player %s is not playing a considered mode!
+                              """.formatted(playerName));
+      case WORK_IN_PROGRESS -> this.embedBuilder
+          .setDescription("Sorry! This feature is still beeing worked on c:\n");
+      default -> this.embedBuilder
+          .setDescription("""
+                              Could not retrieve the requested data :c
+                              Either %s does not exist or there was a internal problem
+                              """.formatted(playerName));
+    }
 
     this.interactionHook.editOriginalEmbeds(this.embedBuilder.build()).queue();
     this.embedBuilder.clear();
