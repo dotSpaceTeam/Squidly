@@ -99,29 +99,43 @@ public class FormattingFactory {
     switch (errorCode) {
       case OFFLINE, ONLINE -> this.embedBuilder
           .setDescription("""
+                              ```fix
                               Could not retrieve the requested data :c
                               The player %s is not in a match!
+                              ```
                               """.formatted(playerName));
       case PRIVACY -> this.embedBuilder.setDescription("""
+                                                           ```fix
                                                            Could not retrieve the requested data :c
                                                            The player %s has a private profile!
+                                                           ```
                                                            """.formatted(playerName));
       case SELECTING -> this.embedBuilder
           .setDescription("""
+                              ```fix
                               Could not retrieve the requested data :c
                               The player %s is selecting.. Try again in a moment!
+                              ```
                               """.formatted(playerName));
       case UNCONSIDERED -> this.embedBuilder
           .setDescription("""
+                              ```fix
                               Could not retrieve the requested data :c
                               The player %s is not playing a considered mode!
+                              ```
                               """.formatted(playerName));
       case WORK_IN_PROGRESS -> this.embedBuilder
-          .setDescription("Sorry! This feature is still beeing worked on c:\n");
+          .setDescription("""
+                              ```fix
+                              Sorry! This feature is still beeing worked on c:
+                              ```
+                              """);
       default -> this.embedBuilder
           .setDescription("""
+                              ```fix
                               Could not retrieve the requested data :c
                               Either %s does not exist or there was a internal problem
+                              ```
                               """.formatted(playerName));
     }
 
