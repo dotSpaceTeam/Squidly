@@ -74,13 +74,13 @@ public class FormattingFactory {
               """
                   ```excel
                   %s(%d)
-                  %s (%d/100)
+                  %s
                                   
-                  %dw/%dl (%s%%)
+                  %dw/%dl %s%%
                   %d quits
                            
                   %d/%d champions
-                  %d achievements
+                  %d/58 achievements
                                
                   %dh played
                   since %s
@@ -90,7 +90,6 @@ public class FormattingFactory {
                       matchData.championName(),
                       matchData.championLevel(),
                       Tier.getRankFromId(playerData.tierRankedKBM()).toString(),
-                      playerData.rankedKBM().points(),
                       playerData.wins(),
                       playerData.losses(),
                       (double) Math.round(winRatio * 10) / 10,

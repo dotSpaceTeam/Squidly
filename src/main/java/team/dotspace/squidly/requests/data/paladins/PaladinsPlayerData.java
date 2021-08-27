@@ -72,11 +72,11 @@ public record PaladinsPlayerData(
    * Empty Json Reponse used for private accounts
    */
   public static final PaladinsPlayerData MOCK_PRIVATE = new PaladinsPlayerData(
-      0,0,"","",0,0,"",0,0,
+      0,0,"","1/1/1999 4:20:69 AM",0,0,"",0,0,
       "", 0,0,null,0,"Private","",
       "", null, null, null,"",0,"",
       0,0,0, "",0,0,0,0,
-      null,"Private", "private account");
+      null,"Private Account!", "private account");
 
 
 }
