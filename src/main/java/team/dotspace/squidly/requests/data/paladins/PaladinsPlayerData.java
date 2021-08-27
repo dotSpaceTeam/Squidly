@@ -52,7 +52,7 @@ public record PaladinsPlayerData(
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @Generated("jsonschema2pojo")
-  private record RankedContainer(
+  public record RankedContainer(
       @JsonProperty("Leaves") long leaves,
       @JsonProperty("Losses") long losses,
       @JsonProperty("Name") String name,
