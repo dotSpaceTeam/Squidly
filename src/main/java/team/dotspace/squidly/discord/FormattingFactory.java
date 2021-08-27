@@ -13,11 +13,15 @@ import team.dotspace.squidly.requests.codes.Tier;
 import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
 
 import java.awt.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class FormattingFactory {
 
   public static final String SQUIDLY_ICON = "https://raw.githubusercontent.com/luissilva1044894/hirez-api-docs/master/.assets/paladins/avatar/24355.png";
+  private static final SimpleDateFormat displayFormat = new SimpleDateFormat("MMM yyyy");
+  private static final SimpleDateFormat originalFormat = new SimpleDateFormat("M/d/yyyy h:mm:ss a");
   private final EmbedBuilder embedBuilder;
   private final InteractionHook interactionHook;
 
@@ -59,36 +63,47 @@ public class FormattingFactory {
     var playerData = player.playerData();
     var matchData = player.matchData();
 
-    this.embedBuilder
-        .addField(
-            matchData.playerName() + " (Lvl. " + matchData.accountLevel() + ")",
-            """
-                ```excel
-                %s(%s)
-                "%s"
+    var playername = playerData.hzGamerTag() == null ? playerData.hzPlayerName() : playerData.hzGamerTag();
+    var gamesPlayed = playerData.wins() + playerData.losses();
+    double winRatio = ((double) playerData.wins() / (gamesPlayed != 0 ? gamesPlayed : 1)) * 100;
+
+    try {
+      this.embedBuilder
+          .addField(
+              playername + " (Lvl. " + matchData.accountLevel() + ")",
+              """
+                  ```excel
+                  %s(%d)
+                  %s (%d/100)
                                   
-                %s
-                                
-                %sw/%sl
-                %s quits
-                                
-                %sh played
-                %s/%s champions
-                ```
-                """
-                .formatted(
-                    matchData.championName(),
-                    matchData.championLevel(),
-                    playerData.title() == null ? "" : playerData.title(),
-                    Tier.getRankFromId(playerData.tierRankedKBM()).toString(),
-                    matchData.tierWins(),
-                    matchData.tierLosses(),
-                    playerData.leaves(),
-                    playerData.hoursPlayed(),
-                    matchData.accountChampionsPlayed(),
-                    50 //TODO get all champion count
-                ),
-            true);
+                  %dw/%dl (%s%%)
+                  %d quits
+                           
+                  %d/%d champions
+                  %d achievements
+                               
+                  %dh played
+                  since %s
+                  ```
+                  """
+                  .formatted(
+                      matchData.championName(),
+                      matchData.championLevel(),
+                      Tier.getRankFromId(playerData.tierRankedKBM()).toString(),
+                      playerData.rankedKBM().points(),
+                      playerData.wins(),
+                      playerData.losses(),
+                      (double) Math.round(winRatio * 10) / 10,
+                      playerData.leaves(),
+                      matchData.accountChampionsPlayed(),
+                      50, //TODO get all champion count
+                      playerData.totalAchievements(),
+                      playerData.hoursPlayed(),
+                      displayFormat.format(originalFormat.parse(playerData.createdDatetime()))
+                  ),
+              true);
+    } catch (ParseException ignored) {
+    }
   }
 
   public void withErrorCode(String playerName, ErrorCode errorCode) {
