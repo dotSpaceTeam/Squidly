@@ -10,7 +10,6 @@
 ## Introduction
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/dotSpaceTeam/Squidly/Java%20CI%20with%20Gradle)
-[![All Contributors](https://img.shields.io/badge/all_contributors-73-orange.svg?style=flat-square)](./CONTRIBUTORS.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Support Server](https://img.shields.io/discord/678733739504697375.svg?color=7289da&label=dotSpace%20Dev&logo=discord&style=flat-square)](https://discord.gg/mFfDMAEFWE)
 
