@@ -53,24 +53,23 @@ public class APIRequestBuilder {
     return this;
   }
 
-  public String constructURL() {
+  public HttpResponse<JsonNode> build() {
     this.parameterMap.put(RequestParameterType.DEVELOPER_ID, this.credentialPair.devID());
     this.parameterMap.put(RequestParameterType.SIGNATURE, getSignature());
     this.parameterMap.put(RequestParameterType.TIMESTAMP, getTimestamp());
-    this.parameterMap.put(RequestParameterType.SESSION, getSession());
+    if (Arrays.asList(this.commandType.getRequiredTypes()).contains(RequestParameterType.SESSION))
+      this.parameterMap.put(RequestParameterType.SESSION, getSession());
 
-    return Arrays
+    var url = Arrays
         .stream(commandType.getRequiredTypes())
         .map(type -> parameterMap.get(type))
         .collect(Collectors.joining("/", this.endpoint.getUrl() + this.commandType.name() + "json/", ""));
-  }
 
-  public HttpResponse<JsonNode> build() {
-    return Unirest.get(constructURL()).asJson();
+    return Unirest.get(url).asJson();
   }
 
   private String getSession() {
-    return SquidlyBot.getInstance().getSessionHandler().getSession(this.commandType.getEndpoint());
+    return SquidlyBot.getInstance().getSessionHandler().getSession(this.endpoint);
   }
 
   private String getSignature() {
