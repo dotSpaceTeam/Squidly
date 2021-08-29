@@ -27,14 +27,8 @@ public class APIRequestBuilder {
   private final HirezCredentialPair credentialPair = SquidlyBot.getInstance().getHirezCredentialPair();
 
   private final HirezCommandType commandType;
-  private HirezEndpoint endpoint = HirezEndpoint.PALADINS;
-  private RequestParameterMap parameterMap = new RequestParameterMap();
-
-  public APIRequestBuilder(HirezCommandType commandType, RequestParameterMap parameterMap) {
-    this.commandType = commandType;
-    this.parameterMap = parameterMap;
-    this.endpoint = commandType.getEndpoint();
-  }
+  private final HirezEndpoint endpoint;
+  private final RequestParameterMap parameterMap = new RequestParameterMap();
 
   public APIRequestBuilder(HirezCommandType commandType) {
     this.commandType = commandType;
@@ -55,7 +49,7 @@ public class APIRequestBuilder {
 
     var url = Arrays
         .stream(commandType.getRequiredTypes())
-        .map(type -> parameterMap.get(type))
+        .map(parameterMap::get)
         .collect(Collectors.joining("/", this.endpoint.getUrl() + this.commandType.name() + "json/", ""));
 
     return Unirest.get(url).asJson();

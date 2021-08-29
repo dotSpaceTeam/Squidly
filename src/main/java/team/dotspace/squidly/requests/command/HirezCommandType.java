@@ -37,16 +37,14 @@ public enum HirezCommandType {
   gettopmatches(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP);
 
 
-  HirezEndpoint endpoint;
   RequestParameterType[] requiredTypes;
 
   HirezCommandType(RequestParameterType... requiredTypes) {
-    this.endpoint = endpoint;
     this.requiredTypes = requiredTypes;
   }
 
   public HirezEndpoint getEndpoint() {
-    return endpoint;
+    return HirezEndpoint.PALADINS;
   }
 
   public RequestParameterType[] getRequiredTypes() {
