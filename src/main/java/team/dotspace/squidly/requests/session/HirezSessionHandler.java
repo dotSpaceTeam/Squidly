@@ -19,82 +19,51 @@ import java.util.concurrent.atomic.AtomicReference;
 public class HirezSessionHandler {
 
   private final Logger logger = LoggerFactory.getLogger(HirezSessionHandler.class);
-  private final Timer cleanupTimerPaladins = new Timer("Paladins-Session-Timer");
-  private final Timer cleanupTimerSmite = new Timer("Smite-Session-Timer");
-  private String paladinsSession;
-  private String smiteSession;
+  private final Timer cleanupTimerPaladins = new Timer("Session-Timer");
+  private String session;
 
   public HirezSessionHandler() {
-    this.paladinsSession = "";
-    this.smiteSession = "";
+    this.session = "";
   }
 
-  public String getSession(HirezEndpoint endpoint) {
+  public String getSession() {
     AtomicReference<String> session = new AtomicReference<>("");
-    return switch (endpoint) {
-      case PALADINS -> {
 
-        if (paladinsSession.isEmpty()) {
-          requestSession(endpoint).ifPresent(session::set);
-          this.scheduleSessionCleanup(endpoint);
-        } else {
-          yield paladinsSession;
-        }
-
-        yield session.get();
-      }
-      case SMITE -> {
-        if (smiteSession.isEmpty()) {
-          requestSession(endpoint).ifPresent(session::set);
-        } else {
-          yield smiteSession;
-        }
-
-        yield session.get();
-      }
-      case ANY -> this.getSession(HirezEndpoint.PALADINS);
-    };
-
-  }
-
-  private void scheduleSessionCleanup(HirezEndpoint endpoint) {
-    switch (endpoint) {
-      case PALADINS -> cleanupTimerPaladins.schedule(new TimerTask() {
-        @Override
-        public void run() {
-          paladinsSession = "";
-        }
-      }, 1000 * 60 * 15);
-      case SMITE -> cleanupTimerSmite.schedule(new TimerTask() {
-        @Override
-        public void run() {
-          smiteSession = "";
-        }
-      }, 1000 * 60 * 15);
-      case ANY -> this.scheduleSessionCleanup(HirezEndpoint.PALADINS);
+    if (this.session.isEmpty()) {
+      requestSession().ifPresent(session::set);
+      this.scheduleSessionCleanup();
+    } else {
+      return this.session;
     }
 
+    return session.get();
+
   }
 
-  private Optional<String> requestSession(HirezEndpoint endpoint) {
+  private void scheduleSessionCleanup() {
+    cleanupTimerPaladins.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        session = "";
+      }
+    }, 1000 * 60 * 15);
+  }
+
+  private Optional<String> requestSession() {
     var response = new APIRequestBuilder(HirezCommandType.createsession)
-        .changeEndpoint(endpoint)
         .build();
 
     if (response.isSuccess()) {
 
       if (response.getBody().getObject().getString("ret_msg").equals("Approved")) {
         var sessionId = response.getBody().getObject().getString("session_id");
-        logger.info("Successfully retrieved new " + endpoint.name() + " Session! ({})", sessionId);
+        logger.info("Successfully retrieved new Session! ({})", sessionId);
+        this.session = sessionId;
 
-        if (endpoint == HirezEndpoint.PALADINS)
-          this.paladinsSession = sessionId;
-        else if (endpoint == HirezEndpoint.SMITE)
-          this.smiteSession = sessionId;
 
         return Optional.ofNullable(sessionId);
       }
-      logger.error("There was a problem requesting a new " + endpoint.name() + " Session! Msg: {}", response.getBody().getObject().getString("ret_msg"));
+      logger.error("There was a problem requesting a new Session! Msg: {}", response.getBody().getObject().getString("ret_msg"));
 
     } else {
 

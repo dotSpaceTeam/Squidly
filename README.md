@@ -17,7 +17,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![Support Server](https://img.shields.io/discord/678733739504697375.svg?color=7289da&label=dotSpace%20Dev&logo=discord&style=flat-square)](https://discord.gg/mFfDMAEFWE)
 
-The most advanced Discord-Bot satisfying your competitive needs whilst playing [Paladins][pala] or [Smite][smite]!
+The most advanced Discord-Bot satisfying your competitive needs whilst playing [Paladins][pala]!
 
 **Invite to your server [here](https://dotspace.dev/squidly/invite)**
 
@@ -94,8 +94,6 @@ Sample json file:
 ```
 
 [pala]: <https://www.paladins.com/>
-
-[smite]: <https://www.smitegame.com/>
 
 [hirez]: <http://www.hirezstudios.com/>
 

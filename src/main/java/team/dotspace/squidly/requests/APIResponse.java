@@ -16,23 +16,21 @@ import team.dotspace.squidly.requests.command.HirezCommandType;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public record APIResponse(int statusCode, String statusText, HirezCommandType commandType, HirezEndpoint endpoint,
+public record APIResponse(int statusCode, String statusText, HirezCommandType commandType,
                           JsonNode jsonNode) {
 
-  public APIResponse(@NotNull HttpResponse<JsonNode> httpResponse, @NotNull HirezCommandType commandType, @NotNull HirezEndpoint endpoint) {
+  public APIResponse(@NotNull HttpResponse<JsonNode> httpResponse, @NotNull HirezCommandType commandType) {
     this(
         httpResponse.getStatus(),
         httpResponse.getStatusText(),
         commandType,
-        endpoint,
         httpResponse.getBody());
   }
 
-  public APIResponse(int statusCode, @NotNull String statusText, @NotNull HirezCommandType commandType, @NotNull HirezEndpoint endpoint, @Nullable JsonNode jsonNode) {
+  public APIResponse(int statusCode, @NotNull String statusText, @NotNull HirezCommandType commandType, @Nullable JsonNode jsonNode) {
     this.statusCode = statusCode;
     this.statusText = statusText;
     this.commandType = commandType;
-    this.endpoint = endpoint;
     this.jsonNode = Objects.requireNonNullElse(jsonNode, new JsonNode("{}"));
   }
 
@@ -80,7 +78,6 @@ public record APIResponse(int statusCode, String statusText, HirezCommandType co
         "statusCode=" + statusCode +
         ", statusText='" + statusText + '\'' +
         ", commandType=" + commandType +
-        ", endpoint=" + endpoint +
         ", jsonNode=" + jsonNode +
         '}';
   }

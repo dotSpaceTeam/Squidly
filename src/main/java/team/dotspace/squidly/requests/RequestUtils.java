@@ -7,7 +7,6 @@ package team.dotspace.squidly.requests;
 
 import kong.unirest.json.JSONObject;
 import team.dotspace.squidly.discord.FormattingFactory;
-import team.dotspace.squidly.requests.codes.HirezEndpoint;
 import team.dotspace.squidly.requests.codes.PlayerStatusCode;
 import team.dotspace.squidly.requests.codes.Queue;
 import team.dotspace.squidly.requests.command.HirezCommandType;
@@ -20,10 +19,10 @@ import static team.dotspace.squidly.requests.codes.ErrorCode.*;
 
 public class RequestUtils {
 
-  public static Optional<APIResponse> handleGeneral(final String playerName, final HirezEndpoint endpoint, final FormattingFactory formattingFactory) {
+  public static Optional<APIResponse> handleGeneral(final String playerName, final FormattingFactory formattingFactory) {
     var response = new AtomicReference<APIResponse>();
 
-    getPlayerId(playerName, endpoint)
+    searchPlayer(playerName)
         .then(playerIdRes -> {
 
           if (playerIdRes.jsonNode().getArray().length() > 1)
@@ -37,7 +36,7 @@ public class RequestUtils {
             return;
           }
 
-          getPlayerStatus(playerId, endpoint)
+          getPlayerStatus(playerId)
               .then(playerStatusRes -> {
                 var playerStatusObj = ((JSONObject) playerStatusRes.jsonNode().getArray().get(0));
 
@@ -79,31 +78,28 @@ public class RequestUtils {
     return Optional.ofNullable(response.get());
   }
 
-  private static APIResponse getPlayerId(String PlayerName, HirezEndpoint endpoint) {
+  private static APIResponse searchPlayer(String PlayerName) {
     var response = new APIRequestBuilder(HirezCommandType.searchplayers)
         .addParameter(RequestParameterType.SEARCH_PLAYER, PlayerName)
-        .changeEndpoint(endpoint)
         .build();
 
-    return new APIResponse(response, HirezCommandType.getplayeridbyname, endpoint);
+    return new APIResponse(response, HirezCommandType.getplayeridbyname);
   }
 
-  private static APIResponse getPlayerStatus(String playerId, HirezEndpoint endpoint) {
+  private static APIResponse getPlayerStatus(String playerId) {
     var response = new APIRequestBuilder(HirezCommandType.getplayerstatus)
         .addParameter(RequestParameterType.PLAYER_ID, playerId)
-        .changeEndpoint(endpoint)
         .build();
 
-    return new APIResponse(response, HirezCommandType.getplayerstatus, endpoint);
+    return new APIResponse(response, HirezCommandType.getplayerstatus);
   }
 
-  public static APIResponse getMatchPlayerDetails(String matchid, HirezEndpoint endpoint) {
+  public static APIResponse getMatchPlayerDetails(String matchid) {
     var response = new APIRequestBuilder(HirezCommandType.getmatchplayerdetails)
         .addParameter(RequestParameterType.MATCH_ID, matchid)
-        .changeEndpoint(endpoint)
         .build();
 
-    return new APIResponse(response, HirezCommandType.getmatchplayerdetails, endpoint);
+    return new APIResponse(response, HirezCommandType.getmatchplayerdetails);
   }
 
   /**
@@ -111,17 +107,15 @@ public class RequestUtils {
    * Paladins only!
    *
    * @param playerIds a comma seperated string of up to 20 playerId's
-   * @param endpoint  the requested endpoint
    * @return the APIResponse Object.
    */
-  public static APIResponse getPlayerDetailsBatch(String playerIds, HirezEndpoint endpoint) {
+  public static APIResponse getPlayerDetailsBatch(String playerIds) {
     var response = new APIRequestBuilder(HirezCommandType.getplayerbatch)
         .addParameter(
             RequestParameterType.PLAYER_ID_SET, playerIds)
-        .changeEndpoint(endpoint)
         .build();
 
-    return new APIResponse(response.getStatus(), response.getStatusText(), HirezCommandType.getplayerbatch, endpoint, response.getBody());
+    return new APIResponse(response.getStatus(), response.getStatusText(), HirezCommandType.getplayerbatch, response.getBody());
   }
 
 }

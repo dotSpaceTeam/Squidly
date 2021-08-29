@@ -24,10 +24,6 @@ public class SlashCommandManager extends ListenerAdapter {
     commandDataList.add(
         new CommandData("match", "Displays important information about a players current match")
             .addOptions(
-                new OptionData(OptionType.STRING, "game", "The game which shall be searched for the current game")
-                    .addChoice("Paladins", "PALADINS")
-                    .addChoice("Smite", "SMITE")
-                    .setRequired(true),
                 new OptionData(OptionType.STRING, "player", "Displays information about a players current match")
                     .setRequired(true)
             )
@@ -35,12 +31,6 @@ public class SlashCommandManager extends ListenerAdapter {
 
     commandDataList.add(
         new CommandData("mymatch", "Displays information about the current match of your saved player")
-            .addOptions(
-                new OptionData(OptionType.STRING, "game", "The game which shall be searched for the current game")
-                    .addChoice("Paladins", "PALADINS")
-                    .addChoice("Smite", "SMITE")
-                    .setRequired(false)
-            )
     );
   }
 

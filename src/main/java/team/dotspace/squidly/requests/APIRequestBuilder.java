@@ -27,7 +27,7 @@ public class APIRequestBuilder {
   private final HirezCredentialPair credentialPair = SquidlyBot.getInstance().getHirezCredentialPair();
 
   private final HirezCommandType commandType;
-  private HirezEndpoint endpoint;
+  private HirezEndpoint endpoint = HirezEndpoint.PALADINS;
   private RequestParameterMap parameterMap = new RequestParameterMap();
 
   public APIRequestBuilder(HirezCommandType commandType, RequestParameterMap parameterMap) {
@@ -43,13 +43,6 @@ public class APIRequestBuilder {
 
   public APIRequestBuilder addParameter(RequestParameterType parameterType, String value) {
     this.parameterMap.put(parameterType, value);
-    return this;
-  }
-
-  public APIRequestBuilder changeEndpoint(HirezEndpoint endpoint) {
-    if (this.endpoint != HirezEndpoint.ANY && this.endpoint != endpoint)
-      SquidlyBot.getInstance().getLogger().error("Arborted chaning endpoint. {} is {} only!", this.commandType.name(), this.commandType.getEndpoint());
-    this.endpoint = endpoint;
     return this;
   }
 
@@ -69,7 +62,7 @@ public class APIRequestBuilder {
   }
 
   private String getSession() {
-    return SquidlyBot.getInstance().getSessionHandler().getSession(this.endpoint);
+    return SquidlyBot.getInstance().getSessionHandler().getSession();
   }
 
   private String getSignature() {

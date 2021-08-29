@@ -10,7 +10,7 @@ import java.util.List;
 public enum Queue {
   UNKOWN(0),
 
-  //PALADINS
+
   LIVE_Siege(424),
   LIVE_Team_Deathmatch(469),
   LIVE_Onslaught(452),
@@ -20,12 +20,8 @@ public enum Queue {
   LIVE_Practice_Siege(425),
   LIVE_Onslaught_Practice(453);
 
-  //SMITE
-  //TODO:
-
   public static List<Integer> consideredQueues = List.of(
-      /* Pala -->  */424, 425, 427, 428, 437, 444, 452, 453, 465, 469, 486,
-      /* Smite --> */ 423, 426, 430, 433, 435, 440, 445, 448, 451, 452, 459, 466, 450, 502, 503, 504
+      /* Pala -->  */424, 425, 427, 428, 437, 444, 452, 453, 465, 469, 486
   );
 
   private final int id;

@@ -7,41 +7,40 @@ package team.dotspace.squidly.requests.command;
 
 import team.dotspace.squidly.requests.codes.HirezEndpoint;
 
-import static team.dotspace.squidly.requests.codes.HirezEndpoint.*;
 import static team.dotspace.squidly.requests.command.RequestParameterType.*;
 
 public enum HirezCommandType {
 
   //APIs - Connectivity, Development, & System Status
-  ping(ANY),
-  createsession(ANY, DEVELOPER_ID, SIGNATURE, TIMESTAMP),
-  testsession(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP),
-  getdataused(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP),
-  gethirezserverstatus(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP),
-  getpatchinfo(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP),
+  ping(),
+  createsession(DEVELOPER_ID, SIGNATURE, TIMESTAMP),
+  testsession(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP),
+  getdataused(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP),
+  gethirezserverstatus(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP),
+  getpatchinfo(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP),
   //APIs - Players & PlayerIds
-  getplayer(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER),
-  getplayerbatch(PALADINS, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID_SET),
-  getplayeridbyname(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_NAME),
+  getplayer(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER),
+  getplayerbatch(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID_SET),
+  getplayeridbyname(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_NAME),
   //APIs - PlayerId Info
-  getplayerstatus(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
-  getgodranks(SMITE, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
-  getchampionranks(PALADINS, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
-  getplayerachievements(SMITE, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
-  getmatchhistory(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
-  getqueuestats(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID, QUEUE),
-  searchplayers(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, SEARCH_PLAYER),
+  getplayerstatus(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
+  getgodranks(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
+  getchampionranks(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
+  getplayerachievements(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
+  getmatchhistory(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID),
+  getqueuestats(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, PLAYER_ID, QUEUE),
+  searchplayers(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, SEARCH_PLAYER),
   //APIs - Match Info
-  getdemodetails(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, MATCH_ID),
-  getmatchdetails(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, MATCH_ID),
-  getmatchplayerdetails(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, MATCH_ID),
-  gettopmatches(ANY, DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP);
+  getdemodetails(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, MATCH_ID),
+  getmatchdetails(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, MATCH_ID),
+  getmatchplayerdetails(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP, MATCH_ID),
+  gettopmatches(DEVELOPER_ID, SIGNATURE, SESSION, TIMESTAMP);
 
 
   HirezEndpoint endpoint;
   RequestParameterType[] requiredTypes;
 
-  HirezCommandType(HirezEndpoint endpoint, RequestParameterType... requiredTypes) {
+  HirezCommandType(RequestParameterType... requiredTypes) {
     this.endpoint = endpoint;
     this.requiredTypes = requiredTypes;
   }

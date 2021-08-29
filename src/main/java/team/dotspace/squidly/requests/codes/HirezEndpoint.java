@@ -7,9 +7,7 @@ package team.dotspace.squidly.requests.codes;
 
 public enum HirezEndpoint {
 
-  PALADINS("https://api.paladins.com/paladinsapi.svc/"),
-  SMITE("https://api.smitegame.com/smiteapi.svc/"),
-  ANY(PALADINS.url);
+  PALADINS("https://api.paladins.com/paladinsapi.svc/");
 
   String url;
 

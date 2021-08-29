@@ -29,12 +29,11 @@ public enum RequestParameterType {
   MATCH_ID("match_id"), //The id of the match. Can be obtained from /getmatchHistory, /gettopmatches & /getmatchidsbyqueue
 
   PORTAL_ID("portalId"), //1:Hi-Rez, 5:Steam, 9:PS4, 10:Xbox, 22:Switch, 25:Discord, 28:Epic
-  PORTAL_USER_ID("portalUserId"), //The (usually) 3rd-Party identifier for a Portal.  Examples:  Steam ID, PS4 GamerTag, Xbox GamerTag, Switch GamerTag.
-
-  CLAN_ID("clanid"), //id of the clan. Can be obtained from searchteams
-  SEARCH_TEAM("searchTeam"); //name of clan for whom to search
+  PORTAL_USER_ID("portalUserId") //The (usually) 3rd-Party identifier for a Portal.  Examples:  Steam ID, PS4 GamerTag, Xbox GamerTag, Switch GamerTag.
+  ;
 
   String s;
+
   RequestParameterType(String s) {
     this.s = s;
   }
