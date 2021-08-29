@@ -1,5 +1,7 @@
 <h1 align="center"> Squidly </h1> <br>
 
+---
+
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -23,39 +25,73 @@ The most advanced Discord-Bot satisfying your competitive needs whilst playing [
 
 A few of the things you can do with Squidly:
 
-* Retrieve & display data directly from Hi-Rez 
-* Works with every Platform (Switch, Steam, Epic ...) 
+* Retrieve & display data directly from Hi-Rez
+* Works with every Platform (Switch, Steam, Epic ...)
 * Visualize opposing teams and showing their stats
 * Show Level, Rank, Playtime and more rich information
 
 ## Feedback
 
-Feel free to send us feedback on [Twitter](https://twitter.com/dotspaceDev) or [file an issue](https://github.com/dotSpaceTeam/Squidly/issues/new).
-Feature requests are always welcome. <br>
-Also feel free to submit a PR! https://makeapullrequest.com/
+Feel free to send us feedback on [Twitter](https://twitter.com/dotspaceDev)
+or [file an issue](https://github.com/dotSpaceTeam/Squidly/issues/new). Feature requests are always welcome.  
+Also feel free to submit a PR!  https://makeapullrequest.com/
 
 If there's anything you'd like to chat about, please feel free to join our [Discord](https://discord.gg/mFfDMAEFWE)!
 
 ## Building and Running
 
 #### Building
+
 - To build and execute the jar **Java 16** is recommended.
 - Execute ``gradlew build`` to create the executable fat jar.
 
 #### Running
-- You need to specify two or three arguments to start the application.
-- The first argument needs to be a path to a text file containing the discord token **or** the token itself.
-- The second argument either needs to be a path to a json file containing the credentials of the Hi-Rez API or the Hi-Rez developerID.
-- The third argument is only applicable if u specified the developerID before. You **need** to specify the authentication key.
+
+* You need **Java 16** to run this application.
+* The following parameters are needed to sucessfully start the application.
+
+##### Parameters
+
+|Heres what you need!|
+|---|
+|Discord bot token   |
+|Hi-rez developer ID |
+|Hi-rez authentication key |
+
+To provide these to the application you can simply use the environment variables:  
+``SQUIDLY_BOTTOKEN``, ``SQUIDLY_DEVID`` and ``SQUIDLY_AUTHKEY``  
+
+The following chart displays some of the possibilities to provide the
+parameters.
+
+|  Parameter | ↓ | ↓  | ↓ |  ↓ | ↓ |
+|------------|---|----|---|----|---|
+| bot token  |ENV|ENV |ARG|FILE|ANY|
+| dev id     |ENV|JSON|ENV|JSON|ARG|
+| auth key   |ENV|JSON|ENV|JSON|ARG|
+
+``ENV``: The value stored in the appropriate environment variable.  
+``ARG``: The value directly passed as an argument.  
+``FILE/JSON``: The path to a file containing the value/s directly passed as an argument.
+
+**You can mix them up, but be careful to:**
+
+1. Never seperate the dev id and the auth key
+2. always keep this order: ``token - (dev id - auth key)``  
+   (You can remove either the token or the grouped part, if it is stored in environment variabels)
+
+With ENV: ``java -jar Squidly.jar``  
+With files: ``java -jar Squidly.jar /tokenfile /credentials.json``  
+With args: ``java -jar Squidly.jar tokensample devid authkey``  
 
 Sample json file:
+
 ```
 {
  "devID": "1111",
  "authKEY": "SAMPLEKEYSAMPLEKEYSAMPLEKEY"
 }
 ```
-
 
 [pala]: <https://www.paladins.com/>
 
