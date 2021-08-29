@@ -115,7 +115,7 @@ public class RequestUtils {
             RequestParameterType.PLAYER_ID_SET, playerIds)
         .build();
 
-    return new APIResponse(response.getStatus(), response.getStatusText(), HirezCommandType.getplayerbatch, response.getBody());
+    return new APIResponse(response, HirezCommandType.getplayerbatch);
   }
 
 }

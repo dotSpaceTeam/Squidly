@@ -9,11 +9,8 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import team.dotspace.squidly.requests.codes.HirezEndpoint;
 import team.dotspace.squidly.requests.command.HirezCommandType;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public record APIResponse(int statusCode, String statusText, HirezCommandType commandType,
@@ -25,13 +22,6 @@ public record APIResponse(int statusCode, String statusText, HirezCommandType co
         httpResponse.getStatusText(),
         commandType,
         httpResponse.getBody());
-  }
-
-  public APIResponse(int statusCode, @NotNull String statusText, @NotNull HirezCommandType commandType, @Nullable JsonNode jsonNode) {
-    this.statusCode = statusCode;
-    this.statusText = statusText;
-    this.commandType = commandType;
-    this.jsonNode = Objects.requireNonNullElse(jsonNode, new JsonNode("{}"));
   }
 
   public boolean isSuccess() {
