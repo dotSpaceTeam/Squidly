@@ -80,8 +80,8 @@ public class RequestUtils {
   }
 
   private static APIResponse getPlayerId(String PlayerName, HirezEndpoint endpoint) {
-    var response = new APIRequestBuilder(HirezCommandType.getplayeridbyname)
-        .addParameter(RequestParameterType.PLAYER_NAME, PlayerName)
+    var response = new APIRequestBuilder(HirezCommandType.searchplayers)
+        .addParameter(RequestParameterType.SEARCH_PLAYER, PlayerName)
         .changeEndpoint(endpoint)
         .build();
 
