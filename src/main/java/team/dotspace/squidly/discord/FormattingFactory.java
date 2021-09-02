@@ -31,7 +31,7 @@ public class FormattingFactory {
         .setFooter("""
                        Squidly is powered by dotSpace Development.
                        Data provided by Hi-Rez. © 2021 Hi-Rez Studios, Inc. All rights reserved.
-                       """, this.interactionHook.getInteraction().getUser().getAvatarUrl());
+                       """, SQUIDLY_ICON);
   }
 
   public void displayProfile(PaladinsPlayer player) {
@@ -72,9 +72,10 @@ public class FormattingFactory {
     double winRatio = ((double) playerData.wins() / (gamesPlayed != 0 ? gamesPlayed : 1)) * 100;
 
     try {
+      //TODO automate champion and achievement count
       this.embedBuilder
           .addField(
-              playername + " (Lvl. " + matchData.accountLevel() + ")",
+              playername + " (" + matchData.accountLevel() + ")",
               """
                   ```excel
                   %s(%d)
@@ -83,7 +84,7 @@ public class FormattingFactory {
                   %dw/%dl %s%%
                   %d quits
                            
-                  %d/%d champions
+                  %d/50 champions
                   %d/58 achievements
                                
                   %dh played
@@ -99,7 +100,6 @@ public class FormattingFactory {
                       (double) Math.round(winRatio * 10) / 10,
                       playerData.leaves(),
                       matchData.accountChampionsPlayed(),
-                      50, //TODO get all champion count
                       playerData.totalAchievements(),
                       playerData.hoursPlayed(),
                       displayFormat.format(originalFormat.parse(playerData.createdDatetime()))
