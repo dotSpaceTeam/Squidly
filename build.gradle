@@ -7,11 +7,14 @@ plugins {
 group 'team.dotspace.squidly'
 version '1.0-SNAPSHOT'
 
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
 ext {
     JDA_VERSION = '4.3.0_277'
     SLF4J_VERSION = '1.7.32'
-    JACKSON_VERSION = '2.12.4'
-    UNIREST_VERSION = '3.11.12'
+    JACKSON_VERSION = '2.12.5'
+    UNIREST_VERSION = '3.11.13'
 }
 
 repositories {
