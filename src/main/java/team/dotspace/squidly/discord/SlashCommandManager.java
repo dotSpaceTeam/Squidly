@@ -18,19 +18,25 @@ import java.util.Collection;
 
 public class SlashCommandManager extends ListenerAdapter {
 
+  private final String PLAYER_DESC = "The player to retrieve the information from";
+
   private final Collection<CommandData> commandDataList = new ArrayList<>();
 
   {
     commandDataList.add(
-        new CommandData("match", "Displays important information about a players current match")
+        new CommandData("match", "Displays important information about a players live match")
             .addOptions(
-                new OptionData(OptionType.STRING, "player", "Displays information about a players current match")
+                new OptionData(OptionType.STRING, "player", this.PLAYER_DESC)
                     .setRequired(true)
             )
     );
 
     commandDataList.add(
-        new CommandData("mymatch", "Displays information about the current match of your saved player")
+        new CommandData("profile", "Displays generic information about a player")
+            .addOptions(
+                new OptionData(OptionType.STRING, "player", this.PLAYER_DESC)
+                    .setRequired(true)
+            )
     );
   }
 

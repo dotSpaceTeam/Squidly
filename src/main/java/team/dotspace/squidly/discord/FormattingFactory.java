@@ -34,7 +34,11 @@ public class FormattingFactory {
                        """, this.interactionHook.getInteraction().getUser().getAvatarUrl());
   }
 
-  public void display(List<PaladinsPlayer> playerList) {
+  public void displayProfile(PaladinsPlayer player) {
+    //TODO
+  }
+
+  public void displayMatch(List<PaladinsPlayer> playerList) {
     var queue = Queue.getFromId(Integer.parseInt(playerList.get(0).matchData().queue()));
 
     this.embedBuilder

@@ -46,7 +46,7 @@ public class MatchCommandHandler {
 
             var playerDataList = this.getPlayerData(playerids);
             var players = this.mergeIntoPaladinsPlayer(dataList, playerDataList);
-            this.formattingFactory.display(players);
+            this.formattingFactory.displayMatch(players);
 
 
           });
