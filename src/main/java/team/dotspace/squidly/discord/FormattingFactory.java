@@ -148,14 +148,20 @@ public class FormattingFactory {
                               Sorry! This feature is still beeing worked on c:
                               ```
                               """);
-      default -> this.embedBuilder
+      case PLAYER_NOT_FOUND -> this.embedBuilder
           .setDescription("""
                               ```fix
                               Could not retrieve the requested data :c
-                              Either %s does not exist or there was a internal problem
+                              The player %s does not exist! Maybe you meant one of these:
                               ```
                               """.formatted(playerName));
+      default -> this.embedBuilder
+          .setDescription("""
+                              Could not retrieve the requested data :c
+                              There was an error while handling your request
+                              """);
     }
+    ;
 
     this.interactionHook.editOriginalEmbeds(this.embedBuilder.build()).queue();
     this.embedBuilder.clear();
