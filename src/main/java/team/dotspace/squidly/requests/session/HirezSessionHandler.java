@@ -5,48 +5,41 @@
 
 package team.dotspace.squidly.requests.session;
 
+import org.cache2k.Cache;
+import org.cache2k.Cache2kBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import team.dotspace.squidly.requests.APIRequestBuilder;
-import team.dotspace.squidly.requests.codes.HirezEndpoint;
 import team.dotspace.squidly.requests.command.HirezCommandType;
 
 import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HirezSessionHandler {
 
   private final Logger logger = LoggerFactory.getLogger(HirezSessionHandler.class);
-  private final Timer cleanupTimerPaladins = new Timer("Session-Timer");
-  private String session;
+  private final Cache<Integer, String> sessionCache;
 
   public HirezSessionHandler() {
-    this.session = "";
+    this.sessionCache = Cache2kBuilder.of(Integer.class, String.class)
+        .eternal(false)
+        .expireAfterWrite(15, TimeUnit.MINUTES)
+        .permitNullValues(true)
+        .entryCapacity(1)
+        .build();
   }
 
   public String getSession() {
-    AtomicReference<String> session = new AtomicReference<>("");
+    AtomicReference<String> session = new AtomicReference<>(null);
 
-    if (this.session.isEmpty()) {
+    if (this.sessionCache.get(0) == null) {
       requestSession().ifPresent(session::set);
-      this.scheduleSessionCleanup();
     } else {
-      return this.session;
+      return sessionCache.get(0);
     }
 
     return session.get();
-
-  }
-
-  private void scheduleSessionCleanup() {
-    cleanupTimerPaladins.schedule(new TimerTask() {
-      @Override
-      public void run() {
-        session = "";
-      }
-    }, 1000 * 60 * 15);
   }
 
   private Optional<String> requestSession() {
@@ -58,8 +51,7 @@ public class HirezSessionHandler {
       if (response.getBody().getObject().getString("ret_msg").equals("Approved")) {
         var sessionId = response.getBody().getObject().getString("session_id");
         logger.info("Successfully retrieved new Session! ({})", sessionId);
-        this.session = sessionId;
-
+        this.sessionCache.put(0, sessionId);
 
         return Optional.ofNullable(sessionId);
       }

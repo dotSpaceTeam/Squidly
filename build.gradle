@@ -10,12 +10,11 @@ version '1.0-SNAPSHOT'
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
-ext {
-    JDA_VERSION = '4.3.0_277'
-    SLF4J_VERSION = '1.7.32'
-    JACKSON_VERSION = '2.12.5'
-    UNIREST_VERSION = '3.11.13'
-}
+def JDA_VERSION = '4.3.0_277'
+def SLF4J_VERSION = '1.7.32'
+def JACKSON_VERSION = '2.12.5'
+def UNIREST_VERSION = '3.11.13'
+def cache2kVersion = '2.2.1.Final'
 
 repositories {
     mavenCentral()
@@ -30,6 +29,9 @@ dependencies {
     implementation "org.slf4j:slf4j-simple:${SLF4J_VERSION}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
     implementation "com.konghq:unirest-java:${UNIREST_VERSION}:standalone"
+
+    implementation "org.cache2k:cache2k-api:${cache2kVersion}"
+    runtimeOnly "org.cache2k:cache2k-core:${cache2kVersion}"
 }
 
 
