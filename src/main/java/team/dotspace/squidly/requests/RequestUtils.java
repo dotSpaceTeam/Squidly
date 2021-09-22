@@ -9,6 +9,7 @@ import kong.unirest.json.JSONObject;
 import net.dv8tion.jda.internal.utils.tuple.MutableTriple;
 import team.dotspace.squidly.discord.FormattingFactory;
 import team.dotspace.squidly.requests.codes.PlayerStatusCode;
+import team.dotspace.squidly.requests.codes.Portal;
 import team.dotspace.squidly.requests.codes.Queue;
 import team.dotspace.squidly.requests.command.HirezCommandType;
 import team.dotspace.squidly.requests.command.RequestParameterType;
@@ -26,7 +27,7 @@ public class RequestUtils {
   public static Optional<APIResponse> handleGeneral(final String playerName, final FormattingFactory formattingFactory) {
     var response = new AtomicReference<APIResponse>();
 
-    getPlayer(playerName)
+    searchPlayer(playerName)
         .then(playerRes -> {
 
           var length = playerRes.jsonNode().getArray().length();
@@ -148,9 +149,12 @@ public class RequestUtils {
     var dataArray = apiResponse.jsonNode().getArray();
 
     for (int i = 0; i < choices; i++) {
-      if (!(dataArray.length() <= i + 1)) break;
+      if (dataArray.length() < i + 1) break;
       var object = dataArray.getJSONObject(i);
-      result.add(MutableTriple.of(object.getLong("player_id"), object.getString("Name"), object.getString("portal")));
+      result.add(MutableTriple.of(object.getLong("player_id"),
+                                     object.getString("Name"),
+                                     Portal.getById(object.getInt("portal_id")).name())
+      );
     }
 
     return Set.copyOf(result);

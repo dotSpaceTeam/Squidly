@@ -5,6 +5,8 @@
 
 package team.dotspace.squidly.requests.codes;
 
+import java.util.Locale;
+
 public enum Portal {
   UNKNOWN(0),
   HIREZ(1),
@@ -34,6 +36,11 @@ public enum Portal {
 
   public int id() {
     return this.id;
+  }
+
+  @Override
+  public String toString() {
+    return name();
   }
 }
 
