@@ -165,7 +165,7 @@ public class FormattingFactory {
                               There was an error while handling your request
                               """);
     }
-    
+
 
     this.interactionHook.editOriginalEmbeds(this.embedBuilder.build()).queue();
     this.embedBuilder.clear();
@@ -174,7 +174,7 @@ public class FormattingFactory {
   public void displayPlayerOptions(Set<MutableTriple<Long, String, String>> players) {
     List<Button> buttons = new ArrayList<>();
     players.forEach(option -> buttons.add(
-        Button.secondary(option.left.toString(), option.middle + '|' + option.right))
+        Button.secondary(option.left.toString(), option.middle + " | " + option.right))
     );
 
     this.embedBuilder
