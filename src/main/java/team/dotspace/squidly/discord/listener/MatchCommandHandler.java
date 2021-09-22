@@ -45,7 +45,7 @@ public class MatchCommandHandler {
 
 
             var playerDataList = this.getPlayerData(playerids);
-            var players = this.mergeIntoPaladinsPlayer(dataList, playerDataList);
+            var players = this.mergeData(dataList, playerDataList);
             this.formattingFactory.displayMatch(players);
 
 
@@ -93,7 +93,7 @@ public class MatchCommandHandler {
     return dataList;
   }
 
-  private @NotNull List<PaladinsPlayer> mergeIntoPaladinsPlayer(@NotNull List<PaladinsPlayerMatchData> matchDataList, @NotNull List<PaladinsPlayerData> playerDataList) {
+  private @NotNull List<PaladinsPlayer> mergeData(@NotNull List<PaladinsPlayerMatchData> matchDataList, @NotNull List<PaladinsPlayerData> playerDataList) {
     var map = new HashMap<String, PaladinsPlayerData>();
     var result = new ArrayList<PaladinsPlayer>();
 
