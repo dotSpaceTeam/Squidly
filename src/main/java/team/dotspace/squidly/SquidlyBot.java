@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import team.dotspace.squidly.discord.SlashCommandManager;
+import team.dotspace.squidly.discord.CommandManager;
 import team.dotspace.squidly.discord.listener.PrivateChatListener;
 import team.dotspace.squidly.requests.session.HirezSessionHandler;
 
@@ -20,7 +20,7 @@ public class SquidlyBot {
   private final JDA jda;
   private final HirezCredentialPair hirezCredentialPair;
   private HirezSessionHandler sessionHandler;
-  private SlashCommandManager slashCommandManager;
+  private CommandManager commandManager;
 
   public SquidlyBot(JDA jda, HirezCredentialPair credentialPair) {
     this.jda = jda;
@@ -35,9 +35,9 @@ public class SquidlyBot {
 
   private void initialize() {
     this.sessionHandler = new HirezSessionHandler();
-    this.slashCommandManager = new SlashCommandManager();
+    this.commandManager = new CommandManager();
     this.jda.getPresence().setPresence(Activity.competing("Gold League"), true);
-    this.jda.addEventListener(slashCommandManager, new PrivateChatListener());
+    this.jda.addEventListener(commandManager, new PrivateChatListener());
   }
 
   public Logger getLogger() {
@@ -56,7 +56,7 @@ public class SquidlyBot {
     return sessionHandler;
   }
 
-  public SlashCommandManager getSlashCommandManager() {
-    return slashCommandManager;
+  public CommandManager getCommandManager() {
+    return commandManager;
   }
 }

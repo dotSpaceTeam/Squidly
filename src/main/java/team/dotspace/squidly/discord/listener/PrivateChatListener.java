@@ -24,7 +24,7 @@ public class PrivateChatListener extends ListenerAdapter {
     if (!event.getAuthor().getId().equals("237944715998265344")) return;
     if (!event.getMessage().getContentRaw().equals("update!")) return;
 
-    var commandList = instance.getSlashCommandManager().getCommands();
+    var commandList = instance.getCommandManager().getCommands();
     var action = jda.updateCommands().addCommands(commandList);
     action.queue(
         commands -> event.getChannel().sendMessage("Sucessfully updated!").queue(),
