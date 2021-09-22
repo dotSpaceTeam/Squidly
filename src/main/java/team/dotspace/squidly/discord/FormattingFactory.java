@@ -7,6 +7,8 @@ package team.dotspace.squidly.discord;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.internal.utils.tuple.MutableTriple;
 import team.dotspace.squidly.requests.codes.ErrorCode;
 import team.dotspace.squidly.requests.codes.Queue;
 import team.dotspace.squidly.requests.codes.Tier;
@@ -15,7 +17,9 @@ import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class FormattingFactory {
 
@@ -152,7 +156,7 @@ public class FormattingFactory {
           .setDescription("""
                               ```fix
                               Could not retrieve the requested data :c
-                              The player %s does not exist! Maybe you meant one of these:
+                              The player %s does not exist. Check for Typos!
                               ```
                               """.formatted(playerName));
       default -> this.embedBuilder
@@ -161,9 +165,31 @@ public class FormattingFactory {
                               There was an error while handling your request
                               """);
     }
-    ;
+    
 
     this.interactionHook.editOriginalEmbeds(this.embedBuilder.build()).queue();
     this.embedBuilder.clear();
+  }
+
+  public void displayPlayerOptions(Set<MutableTriple<Long, String, String>> players) {
+    List<Button> buttons = new ArrayList<>();
+    players.forEach(option -> buttons.add(
+        Button.secondary(option.left.toString(), option.middle + '|' + option.right))
+    );
+
+    this.embedBuilder
+        .setColor(Color.RED)
+        .setTitle(ErrorCode.CHOOSE_PLAYER.code() + " " + ErrorCode.CHOOSE_PLAYER)
+        .setDescription("""
+                            ```fix
+                            We found multiple players for your search.
+                            Please specify which one to use :)
+                            ```
+                            """);
+
+    this.interactionHook.editOriginalEmbeds(embedBuilder.build())
+        .setActionRow(buttons)
+        .queue();
+
   }
 }

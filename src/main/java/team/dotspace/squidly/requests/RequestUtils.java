@@ -34,12 +34,8 @@ public class RequestUtils {
             formattingFactory.withErrorCode(playerName, PLAYER_NOT_FOUND);
             return;
           } else if (length > 1) {
-            selectFirstChoices(playerRes, 3).forEach(player -> {
-              player.getLeft(); //id
-              player.getMiddle(); //name
-              player.getRight(); //portal
-            });
-            //TODO display
+            var players = selectFirstChoices(playerRes, 3);
+            formattingFactory.displayPlayerOptions(players);
             return;
           }
 
