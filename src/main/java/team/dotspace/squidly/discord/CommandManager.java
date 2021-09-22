@@ -60,7 +60,8 @@ public class CommandManager extends ListenerAdapter {
 
   @Override
   public void onButtonClick(@NotNull ButtonClickEvent event) {
-
+    event.reply("U clicked on playedid: %s".formatted(event.getButton().getId())).queue();
+    //TODO Handle Button Click
   }
 
   @Override
