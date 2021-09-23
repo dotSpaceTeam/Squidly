@@ -5,22 +5,10 @@
 
 package team.dotspace.squidly.discord.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import kong.unirest.json.JSONObject;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.jetbrains.annotations.NotNull;
 import team.dotspace.squidly.discord.FormattingFactory;
 import team.dotspace.squidly.requests.RequestFactory;
-import team.dotspace.squidly.requests.util.RequestUtils;
-import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
-import team.dotspace.squidly.requests.data.paladins.PaladinsPlayerData;
-import team.dotspace.squidly.requests.data.paladins.PaladinsPlayerMatchData;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MatchCommandHandler {
 

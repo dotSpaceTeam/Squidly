@@ -3,7 +3,7 @@
  * Read LICENSE.md for full license agreement.
  */
 
-package team.dotspace.squidly.requests.data.paladins;
+package team.dotspace.squidly.requests.data;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ import javax.annotation.processing.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("jsonschema2pojo")
-public record PaladinsPlayerData(
+public record PlayerDetails(
 
     @JsonProperty("ActivePlayerId") long activePlayerId,
     @JsonProperty("AvatarId") long avatarId,
@@ -71,7 +71,7 @@ public record PaladinsPlayerData(
   /**
    * Empty Json Reponse used for private accounts
    */
-  public static final PaladinsPlayerData MOCK_PRIVATE = new PaladinsPlayerData(
+  public static final PlayerDetails MOCK_PRIVATE = new PlayerDetails(
       0,0,"","1/1/1999 4:20:69 AM",0,0,"",0,0,
       "", 0,0,null,0,"Private","",
       "", null, null, null,"",0,"",

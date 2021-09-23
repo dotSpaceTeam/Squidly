@@ -10,9 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kong.unirest.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
 import team.dotspace.squidly.discord.FormattingFactory;
-import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
-import team.dotspace.squidly.requests.data.paladins.PaladinsPlayerData;
-import team.dotspace.squidly.requests.data.paladins.PaladinsPlayerMatchData;
+import team.dotspace.squidly.requests.data.PaladinsPlayer;
+import team.dotspace.squidly.requests.data.PlayerDetails;
+import team.dotspace.squidly.requests.data.PlayerMatchDetails;
 import team.dotspace.squidly.requests.util.RequestUtils;
 
 import java.util.ArrayList;
@@ -31,34 +31,30 @@ public class RequestFactory {
           var dataList = this.getMatchPlayerData(statusObject);
 
           var playerids = dataList.stream()
-              .map(PaladinsPlayerMatchData::playerId)
+              .map(PlayerMatchDetails::playerId)
               .collect(Collectors.joining(","));
 
 
           var playerDataList = this.getPlayerData(playerids);
           var players = this.mergeMatchData(dataList, playerDataList);
           formattingFactory.displayMatch(players);
-
-
         });
-
-
   }
 
   public void requestProfile() {
 
   }
 
-  private @NotNull List<PaladinsPlayerMatchData> getMatchPlayerData(@NotNull JSONObject statusObject) {
+  private @NotNull List<PlayerMatchDetails> getMatchPlayerData(@NotNull JSONObject statusObject) {
     var response = RequestUtils.getMatchPlayerDetails(statusObject.getString("Match"));
-    List<PaladinsPlayerMatchData> dataList = new ArrayList<>();
+    List<PlayerMatchDetails> dataList = new ArrayList<>();
 
     if (response.isSuccess()) {
       try {
         var ojectMapper = new ObjectMapper();
 
         for (Object o : response.jsonNode().getArray())
-          dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerMatchData.class));
+          dataList.add(ojectMapper.readValue(o.toString(), PlayerMatchDetails.class));
 
       } catch (JsonProcessingException exception) {
         exception.printStackTrace();
@@ -69,16 +65,16 @@ public class RequestFactory {
   }
 
 
-  private @NotNull List<PaladinsPlayerData> getPlayerData(@NotNull String playerIds) {
+  private @NotNull List<PlayerDetails> getPlayerData(@NotNull String playerIds) {
     var response = RequestUtils.getPlayerDetailsBatch(playerIds);
-    List<PaladinsPlayerData> dataList = new ArrayList<>();
+    List<PlayerDetails> dataList = new ArrayList<>();
 
     if (response.isSuccess()) {
       try {
         var ojectMapper = new ObjectMapper();
 
         for (Object o : response.jsonNode().getArray())
-          dataList.add(ojectMapper.readValue(o.toString(), PaladinsPlayerData.class));
+          dataList.add(ojectMapper.readValue(o.toString(), PlayerDetails.class));
 
       } catch (JsonProcessingException exception) {
         exception.printStackTrace();
@@ -88,20 +84,20 @@ public class RequestFactory {
     return dataList;
   }
 
-  private @NotNull List<PaladinsPlayer> mergeMatchData(@NotNull List<PaladinsPlayerMatchData> matchDataList, @NotNull List<PaladinsPlayerData> playerDataList) {
-    var map = new HashMap<String, PaladinsPlayerData>();
+  private @NotNull List<PaladinsPlayer> mergeMatchData(@NotNull List<PlayerMatchDetails> matchDataList, @NotNull List<PlayerDetails> playerDataList) {
+    var map = new HashMap<String, PlayerDetails>();
     var result = new ArrayList<PaladinsPlayer>();
 
-    //Fill map with ids and corresponding playerData
+    //Fill map with ids and corresponding playerDetails
     matchDataList
         .forEach(matchData ->
                      playerDataList.stream()
                          .filter(playerData -> String.valueOf(playerData.activePlayerId()).equals(matchData.playerId()))
                          .findFirst().ifPresent(playerData -> map.put(matchData.playerId(), playerData)));
 
-    //Lookup playerData from map and merge into paladinsPlayer object
+    //Lookup playerDetails from map and merge into paladinsPlayer object
     matchDataList.forEach(matchData -> result.add(new PaladinsPlayer(
-        map.getOrDefault(matchData.playerId(), PaladinsPlayerData.MOCK_PRIVATE),
+        map.getOrDefault(matchData.playerId(), PlayerDetails.MOCK_PRIVATE),
         matchData)));
 
     return result;

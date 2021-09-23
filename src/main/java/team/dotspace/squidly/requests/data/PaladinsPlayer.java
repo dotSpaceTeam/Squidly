@@ -3,10 +3,10 @@
  * Read LICENSE.md for full license agreement.
  */
 
-package team.dotspace.squidly.requests.data.paladins;
+package team.dotspace.squidly.requests.data;
 
 public record PaladinsPlayer(
-    PaladinsPlayerData playerData,
-    PaladinsPlayerMatchData matchData) {
+    PlayerDetails playerDetails,
+    PlayerMatchDetails matchDetails) {
 
 }

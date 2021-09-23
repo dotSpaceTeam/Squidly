@@ -12,7 +12,7 @@ import net.dv8tion.jda.internal.utils.tuple.MutableTriple;
 import team.dotspace.squidly.requests.codes.ErrorCode;
 import team.dotspace.squidly.requests.codes.Queue;
 import team.dotspace.squidly.requests.codes.Tier;
-import team.dotspace.squidly.requests.data.paladins.PaladinsPlayer;
+import team.dotspace.squidly.requests.data.PaladinsPlayer;
 
 import java.awt.*;
 import java.text.ParseException;
@@ -43,7 +43,7 @@ public class FormattingFactory {
   }
 
   public void displayMatch(List<PaladinsPlayer> playerList) {
-    var queue = Queue.getFromId(Integer.parseInt(playerList.get(0).matchData().queue()));
+    var queue = Queue.getFromId(Integer.parseInt(playerList.get(0).matchDetails().queue()));
 
     this.embedBuilder
         .setTitle(queue.toString())
@@ -51,7 +51,7 @@ public class FormattingFactory {
 
     playerList
         .stream()
-        .filter(paladinsPlayer -> paladinsPlayer.matchData().taskForce() == 1)
+        .filter(paladinsPlayer -> paladinsPlayer.matchDetails().taskForce() == 1)
         .forEachOrdered(this::displayPalaPlayer);
 
     this.embedBuilder
@@ -60,7 +60,7 @@ public class FormattingFactory {
 
     playerList
         .stream()
-        .filter(paladinsPlayer -> paladinsPlayer.matchData().taskForce() == 2)
+        .filter(paladinsPlayer -> paladinsPlayer.matchDetails().taskForce() == 2)
         .forEachOrdered(this::displayPalaPlayer);
 
     this.interactionHook.editOriginalEmbeds(embedBuilder.build()).queue();
@@ -68,8 +68,8 @@ public class FormattingFactory {
   }
 
   private void displayPalaPlayer(PaladinsPlayer player) {
-    var playerData = player.playerData();
-    var matchData = player.matchData();
+    var playerData = player.playerDetails();
+    var matchData = player.matchDetails();
 
     var playername = playerData.hzGamerTag() == null ? playerData.hzPlayerName() : playerData.hzGamerTag();
     var gamesPlayed = playerData.wins() + playerData.losses();
