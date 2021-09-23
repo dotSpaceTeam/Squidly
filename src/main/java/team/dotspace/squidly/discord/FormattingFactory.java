@@ -88,7 +88,7 @@ public class FormattingFactory {
                   %dw/%dl %s%%
                   %d quits
                            
-                  %d/50 champions
+                  %d/51 champions
                   %d/58 achievements
                                
                   %dh played
