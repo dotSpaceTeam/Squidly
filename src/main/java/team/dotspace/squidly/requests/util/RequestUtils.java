@@ -3,11 +3,13 @@
  * Read LICENSE.md for full license agreement.
  */
 
-package team.dotspace.squidly.requests;
+package team.dotspace.squidly.requests.util;
 
 import kong.unirest.json.JSONObject;
 import net.dv8tion.jda.internal.utils.tuple.MutableTriple;
 import team.dotspace.squidly.discord.FormattingFactory;
+import team.dotspace.squidly.requests.APIRequestBuilder;
+import team.dotspace.squidly.requests.APIResponse;
 import team.dotspace.squidly.requests.codes.PlayerStatusCode;
 import team.dotspace.squidly.requests.codes.Portal;
 import team.dotspace.squidly.requests.codes.Queue;
