@@ -10,11 +10,11 @@ version '1.0-SNAPSHOT'
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
-def JDA_VERSION = '4.3.0_277'
-def SLF4J_VERSION = '1.7.32'
-def JACKSON_VERSION = '2.12.5'
-def UNIREST_VERSION = '3.11.13'
-def cache2kVersion = '2.2.1.Final'
+def JDA_VERSION = '4.4.0_350'
+def SLF4J_VERSION = '1.7.36'
+def JACKSON_VERSION = '2.13.2.2'
+def UNIREST_VERSION = '3.13.7'
+def cache2kVersion = '2.6.1.Final'
 
 repositories {
     mavenCentral()
